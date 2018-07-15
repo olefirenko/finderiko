@@ -44,7 +44,7 @@
                             @endif
                         </td>
                         <td class="text-info font-weight-bold">{{ $product->brand }}</td>
-                        <td class="font-weight-bold fs-20">{{ $product->price }} {!! $product->getPriceRange($step) !!}</td>
+                        <td class="font-weight-bold fs-20">{!! $product->getPriceRange($step) !!}</td>
                         <td><a href="{{ $product->amazon_link }}" class="btn btn-primary" target="_blank" rel="nofollow">Check price</a></td>
                     </tr>
                     @endforeach
