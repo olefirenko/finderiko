@@ -14,37 +14,39 @@
 
         <h1 class="mt-5 mb-5">10 {{ str_plural($category->title) }} <time datetime='{{ date("d-m-Y") }}'>{{ date('Y') }}</time></h1>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Brand</th>
-                    <th scope="col">Price</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($products as $key => $product)
-                <tr>
-                    <th scope="row">{{ $key + 1 }}</th>
-                    <td>
-                        <a href="{{ $product->amazon_link }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" width="200" style="max-height: 250px"/></a>
-                    </td>
-                    <td>
-                        {{ $product->name }}
-                        @if ($key == 0)
-                        <br><b>(Editor’s Choice)</b>
-                        @endif
-                    </td>
-                    <td class="text-info font-weight-bold">{{ $product->brand }}</td>
-                    <td class="font-weight-bold fs-20">{{ $product->getPriceRange($step) }}</td>
-                    <td><a href="{{ $product->amazon_link }}" class="btn btn-primary" target="_blank" rel="nofollow">Check price</a></td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Brand</th>
+                        <th scope="col">Price</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($products as $key => $product)
+                    <tr>
+                        <th scope="row">{{ $key + 1 }}</th>
+                        <td>
+                            <a href="{{ $product->amazon_link }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" width="200" style="max-height: 250px"/></a>
+                        </td>
+                        <td>
+                            {{ $product->name }}
+                            @if ($key == 0)
+                            <br><b>(Editor’s Choice)</b>
+                            @endif
+                        </td>
+                        <td class="text-info font-weight-bold">{{ $product->brand }}</td>
+                        <td class="font-weight-bold fs-20">{!! $product->getPriceRange($step) !!}</td>
+                        <td><a href="{{ $product->amazon_link }}" class="btn btn-primary" target="_blank" rel="nofollow">Check price</a></td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
         <hr>
         <h2 class="mt-5 mb-3">Similiar Categories</h2>

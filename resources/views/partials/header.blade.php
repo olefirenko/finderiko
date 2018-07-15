@@ -3,7 +3,7 @@
         <a class="navbar-brand" href="/">
         <img src="images/logo.jpg" alt="Finderiko - Best Reviews" class="logo-md" width="180">
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        {{-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent"
         aria-expanded="false" aria-label="Toggle navigation">
         <span class="menu-icon__circle">
@@ -13,7 +13,7 @@
         <span class="menu-icon__bar"></span>
         <span class="menu-icon__bar"></span>
         </span>
-    </button>
+    </button> --}}
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-lg-auto">
         <li class="nav-item active">

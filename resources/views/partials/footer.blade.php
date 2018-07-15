@@ -12,7 +12,7 @@
     </div>
     <div class="col-md-8 col-sm-10">
         <div class="row">
-        <div class="col-md-4 col-6">
+        <div class="col-md-4 col-4">
             <div class="footer-widget">
             <h4 class="footer-widget__title">Company</h4>
             <ul class="list-unstyled">
@@ -34,7 +34,7 @@
             </ul>
             </div>
         </div>
-        <div class="col-md-8 col-6">
+        <div class="col-md-8 col-8">
             <div class="footer-widget">
             <h4 class="footer-widget__title">Departments</h4>
             <div class="row pl-3">

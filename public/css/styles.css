@@ -37,7 +37,6 @@ GLOBAL SHARED STYLES
 ==========================
 */
 /* FONTS IMPORTS */
-@import url("https://fonts.googleapis.com/css?family=Karla:400,700");
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700");
 /* RESET AND DEFAULTS */
 html, body {
@@ -60,6 +59,11 @@ body {
 
 a {
   line-height: 1;
+  color: #C53D0A;
+}
+
+a:hover {
+  color: #F05A22;
 }
 
 button, .btn {
@@ -280,17 +284,17 @@ BUTTONS
 }
 
 .btn-primary {
-  background: #2FE7B1;
-  color: #1B2733;
+  background: #f05922;
+  color: #ffffff;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:visited {
   -webkit-transform: translate(1px, -1px);
           transform: translate(1px, -1px);
-  background: #2FE7B1;
-  color: #1B2733;
-  -webkit-box-shadow: -5px 5px 0 rgba(47, 91, 231, 0.8);
-          box-shadow: -5px 5px 0 rgba(47, 91, 231, 0.8);
+  background: #f05922;
+  color: #ffffff;
+  -webkit-box-shadow: -5px 5px 0 rgba(10, 10, 10, 0.8);
+          box-shadow: -5px 5px 0 rgba(10, 10, 10, 0.8);
 }
 
 .btn-secondary {
@@ -1452,7 +1456,7 @@ BACKGROUND COLORS AND SHAPES COLORS
 }
 
 .text-grey-100 {
-  color: #FAFAFA !important;
+  color: #ccc !important;
 }
 
 .text-warning {
@@ -1468,7 +1472,7 @@ BACKGROUND COLORS AND SHAPES COLORS
 }
 
 .text-info {
-  color: #17a2b8 !important;
+  color: #1E679A !important;
 }
 
 .text-grey {
@@ -1814,3 +1818,4 @@ PADDING TOPS
 
 .fs-20 {
   font-size: 20px;
+}
