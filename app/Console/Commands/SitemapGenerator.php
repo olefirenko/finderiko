@@ -51,5 +51,7 @@ class SitemapGenerator extends Command
         foreach ($categories as $key => $category) {
             $sitemap->addItem(route('category', $category->slug));
         }
+
+        $sitemap->createSitemapIndex(config('app.url'));
     }
 }
