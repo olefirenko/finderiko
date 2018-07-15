@@ -13,7 +13,7 @@ class Product extends Model
         $range_price = str_repeat('$', $range);
 
         if ($range < 5) {
-            $range_price .= '<span class="text-grey-100">'.str_repeat('$', 5 - $range).'</span';
+            $range_price .= '<span class="text-grey-100">'.str_repeat('$', 5 - $range).'</span>';
         }
 
         return $range_price;
