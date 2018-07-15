@@ -10,7 +10,8 @@
   <div class="product-device box-shadow d-none d-md-block"></div>
   <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
 </div>
-<section class="section-spacer pb-0 section--clients">
+<div class="svg_patern">
+<section class="section-spacer pb-0 section--clients pt-0">
   <div class="container">
     <header class="section-header text-center w-100">
       <h2 class="section-title">Popular Categories</h2>
@@ -56,7 +57,7 @@
     </div>
   </div>
 </section>
-
+</div>
 {{-- <section id="overview" class="section-spacer">
   <div class="container">
     <div class="section-screens__inner">

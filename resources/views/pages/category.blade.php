@@ -12,7 +12,7 @@
             </ol>
         </nav>
 
-        <h1 class="mt-5 mb-5">{{ $category->title }} 2018</h1>
+        <h1 class="mt-5 mb-5">10 {{ str_plural($category->title) }} <time datetime='{{ date("d-m-Y") }}'>{{ date('Y') }}</time></h1>
 
         <table class="table">
             <thead>
@@ -29,8 +29,15 @@
                 @foreach ($products as $key => $product)
                 <tr>
                     <th scope="row">{{ $key + 1 }}</th>
-                    <td><a href="{{ $product->amazon_link }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" width="200"/></a></td>
-                    <td>{{ $product->name }}</td>
+                    <td>
+                        <a href="{{ $product->amazon_link }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" width="200" style="max-height: 250px"/></a>
+                    </td>
+                    <td>
+                        {{ $product->name }}
+                        @if ($key == 0)
+                        <br><b>(Editor’s Choice)</b>
+                        @endif
+                    </td>
                     <td class="text-info font-weight-bold">{{ $product->brand }}</td>
                     <td class="font-weight-bold fs-20">{{ $product->getPriceRange($step) }}</td>
                     <td><a href="{{ $product->amazon_link }}" class="btn btn-primary" target="_blank" rel="nofollow">Check price</a></td>
@@ -38,6 +45,21 @@
                 @endforeach
             </tbody>
         </table>
+
+        <hr>
+        <h2 class="mt-5 mb-3">Similiar Categories</h2>
+        <div class="card-group">
+            @foreach ($related_categories as $subcategory)
+            <div class="card">
+                <a href="{{ route('category', $subcategory->slug) }}" class="card-img-top">
+                    <img class="card-img-top" src="{{ $subcategory->image }}" alt="{{ $subcategory->name }}" style="max-height: 250px">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ route('category', $subcategory->slug) }}">{{ str_plural($subcategory->name) }}</a></h5>
+                </div>
+            </div>
+            @endforeach
+        </div>
     </div>
 </div>
 </section>

@@ -24,7 +24,10 @@ class IndexController extends Controller
         // $this->searchAmazon('submersible well pump');
 
         $categories = Category::whereNull('parent_id')->get();
-        $popular_categories = Category::where('parent_id', '!=', null)->latest()->limit(12)->get();
+        $popular_categories = Category::where('parent_id', '!=', null)
+                                      ->where('is_popular', 1)
+                                      ->limit(12)
+                                      ->get();
 
         return view('pages.main', compact('categories', 'popular_categories'));
     }
@@ -38,10 +41,16 @@ class IndexController extends Controller
             $products = Product::where('category_id', $category->id)->get();
             $step = $products->max('price') / 5;
 
+            $related_categories = Category::where('parent_id', $category->parent_id)
+                                          ->where('id', '!=', $category->id)
+                                          ->inRandomOrder()
+                                          ->limit(4)
+                                          ->get();
+
             SEO::setTitle('Top 10 '.str_plural($category->name).' ('.date('F Y').')');
             SEO::setDescription('Finderiko analyzes and compares all '.str_plural($category->name).' of '.date('Y').'. You can easily compare and choose from the 10 best '.str_plural($category->name).' for you.');
 
-            return view('pages.category', compact('category', 'products', 'step'));
+            return view('pages.category', compact('category', 'products', 'step', 'related_categories'));
         } else {
             SEO::setTitle(str_plural($category->name));
             SEO::setDescription('Finderiko analyzes and compares all '.str_plural($category->name).' of '.date('Y').'. You can easily compare and choose from the best '.str_plural($category->name));

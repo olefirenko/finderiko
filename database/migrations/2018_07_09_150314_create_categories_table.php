@@ -26,6 +26,7 @@ class CreateCategoriesTable extends Migration
             $table->integer('parent_id');
             $table->string('slug');
             $table->string('image');
+            $table->tinyInteger('is_popular');
             $table->timestamps();
         });
     }

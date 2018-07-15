@@ -20,8 +20,7 @@
                 <img class="card-img-top" src="{{ $subcategory->image }}" alt="{{ $subcategory->name }}" style="max-height: 300px">
             </a>
             <div class="card-body">
-                <h5 class="card-title"><a href="{{ route('category', $subcategory->slug) }}">{{ $subcategory->name }}</a></h5>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <h5 class="card-title"><a href="{{ route('category', $subcategory->slug) }}">{{ str_plural($subcategory->name) }}</a></h5>
             </div>
         </div>
         @endforeach
