@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\AmazonParser::class,
         Commands\SitemapGenerator::class,
+        Commands\ClearPageCache::class,
     ];
 
     /**
