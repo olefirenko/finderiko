@@ -43,7 +43,7 @@ class IndexController extends Controller
 
             $bests_for_money = $products->take(6);
             $bests_for_money->shift();
-            $best_for_money = $bests_for_money->sortBy('price')->first();
+            $best_for_money = $bests_for_money->sortBy('price')->firstWhere('price', '>', 0);
 
             $related_categories = Category::where('parent_id', $category->parent_id)
                                           ->where('id', '!=', $category->id)
