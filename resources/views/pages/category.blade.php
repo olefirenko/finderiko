@@ -52,6 +52,13 @@
             </table>
         </div>
 
+        @if ($category->buyers_quide)
+        <hr>
+        <div class="mt-5 mb-5">
+            {!! $category->buyers_quide !!}
+        </div>
+        @endif
+
         <hr>
         <h2 class="mt-5 mb-3">Similiar Categories</h2>
         <div class="card-group">
