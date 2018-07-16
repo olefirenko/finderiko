@@ -58,6 +58,53 @@
   </div>
 </section>
 </div>
+
+<section id="faqs" class="section-spacer section-faq border-bottom">
+  <div class="container">
+  <header class="section-header text-center">
+  <h2 class="section-title">Why Use Finderiko?</h2>
+  </header>
+  <div class="row">
+  <div class="col-sm-6">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Save Money</h5>
+      <p>Our algorithm searches all of the corners of the internet to find the lowest prices available for the product you might be searching for. Enjoy keeping more money in your pocket with our expert software.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Save Time</h5>
+        <p>We do all of the searching and price comparing for you so all you have to do is choose between perfect product matches that are well within your budget.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Shop Stress Free</h5>
+          <p>Our algorithm searches through thousands of reviews on products to make sure that the products we recommend are of the highest quality possible. </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Our Technology</h5>
+            <p>Our team has assembled a successful algorithm that is able to use a combination of machine learning, big data and expert consultations to find the best of the best when it comes to online products.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-40 text-center">
+        <a href="/p/about" class="btn btn-primary btn-lg">Learn more about us</a>
+      </div>
+    </div>
+</section>
 {{-- <section id="overview" class="section-spacer">
   <div class="container">
     <div class="section-screens__inner">
