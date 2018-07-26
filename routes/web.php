@@ -14,3 +14,4 @@
 Route::get('/', 'IndexController@index');
 Route::get('{slug}', 'IndexController@category')->name('category');
 Route::get('p/{slug}', ['as' => 'article', 'uses' => 'ArticleController@show']);
+Route::get('delete/{id}', 'IndexController@deleteCategory');

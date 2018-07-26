@@ -5,12 +5,15 @@ namespace App\Console\Commands;
 use Log;
 use Parser;
 use Exception;
-use App\Category;
 use ApaiIO\ApaiIO;
+use App\Models\Keyword;
+use App\Models\Product;
+use App\Models\Category;
 use ApaiIO\Operations\Search;
 use Illuminate\Console\Command;
 use ApaiIO\Operations\BrowseNodeLookup;
 use ApaiIO\Configuration\GenericConfiguration;
+use Revolution\Amazon\ProductAdvertising\Facades\AmazonProduct;
 
 class AmazonParser extends Command
 {
@@ -57,9 +60,134 @@ class AmazonParser extends Command
      */
     public function handle()
     {
-        $node_id = $this->ask('What is the node id you are going to fetch?');
+        // $node_id = $this->ask('What is the node id you are going to fetch?');
 
-        $this->parseNode($node_id);
+        // $this->parseNode($node_id);
+        //$this->searchAmazon('blue lipstick');
+
+        $keywords = Keyword::all();
+        foreach ($keywords as $keyword) {
+            $this->searchAmazon(trim(str_replace('best', '', $keyword->name)));
+            $keyword->delete();
+            sleep(1);
+        }
+    }
+
+    protected function searchAmazon($keyword, $department = 'All')
+    {
+        // search by keyword
+        // add category with root parent_id from ancestors
+
+        $category = Category::where('name', ucwords($keyword))
+                            ->orWhere('name', str_plural(ucwords($keyword)))
+                            ->first();
+
+        if ($category) {
+            Log::debug('Category already exists: '.$keyword);
+            return false;
+        }
+
+        $search = new Search();
+        $search->setCategory($department);
+        $search->setKeywords($keyword);
+        $search->setResponseGroup(['BrowseNodes', 'Images', 'ItemAttributes', 'Offers', 'SalesRank']);
+
+        $results = AmazonProduct::run($search);
+
+        if (array_get($results, 'Items.Request.IsValid')) {
+            $category_id = 0;
+
+            // if no results
+            if (!array_get($results, 'Items.Item')) {
+                Log::debug('No items for :'.$keyword);
+                return false;
+            }
+
+            foreach (array_get($results, 'Items.Item') as $key => $product_data) {
+                // add image and parent_id
+                if ($key == 0) {
+                    if (array_get($product_data, 'BrowseNodes.BrowseNode.0')) {
+                        $node = array_get($product_data, 'BrowseNodes.BrowseNode.0');
+                    } else {
+                        $node = array_get($product_data, 'BrowseNodes.BrowseNode');
+                    }
+
+                    if (is_null($node)) {
+                        Log::debug('No parent name for :'.$keyword);
+                        return false;
+                    }
+
+                    $parent = $this->findParentCategory($node);
+
+                    if (!isset($parent['Name']) || is_null($node)) {
+                        Log::debug('No parent name for :'.$keyword);
+                        return false;
+                    }
+
+                    $parent_category = Category::firstOrCreate([
+                        'name' => $parent['Name'],
+                    ]);
+
+                    if (!$category) {
+                        // insert new category
+                        $category = new Category;
+                        $category->name = ucwords($keyword); // add Best if needed and make all first letters capital
+                        $category->title = 'Best '.ucwords($keyword);
+                        $category->image = array_get($product_data, 'LargeImage.URL');
+                        $category->parent_id = $parent_category->id;
+                        $category->save();
+                    }
+
+                    $category_id = $category->id;
+                }
+
+                $this->parseAmazonProductArray($product_data, $category_id);
+            }
+        }
+    }
+
+    protected function findParentCategory(array $node)
+    {
+        $browser_node = $node['Ancestors']['BrowseNode'];
+
+        while (isset($browser_node['Ancestors'])) {
+            $browser_node = $browser_node['Ancestors']['BrowseNode'];
+        }
+
+        return $browser_node;
+    }
+
+    protected function parseAmazonNode($node_id, $category_id, $department = 'Toys')
+    {
+
+        $response = AmazonProduct::browse($node_id);
+        $nodes = array_get($response, 'BrowseNodes');
+        $items = array_get($nodes, 'BrowseNode.TopSellers.TopSeller');
+        $asins = array_pluck($items, 'ASIN');
+        $results = AmazonProduct::items($asins);
+
+        if (array_get($results, 'Items.Request.IsValid')) {
+            foreach (array_get($results, 'Items.Item') as $key => $product_data) {
+                $this->parseAmazonProductArray($product_data, $category_id);
+            }
+        }
+    }
+
+    protected function parseAmazonProductArray(array $product_data = [], int $category_id)
+    {
+        $product = new Product;
+        $product->ASIN = array_get($product_data, 'ASIN');
+        $product->amazon_link = array_get($product_data, 'DetailPageURL');
+        $product->sales_rank = array_get($product_data, 'SalesRank');
+        $product->image = array_get($product_data, 'LargeImage.URL');
+        $product->brand = array_get($product_data, 'ItemAttributes.Brand');
+        $product->name = array_get($product_data, 'ItemAttributes.Title');
+        $product->minimum_age_month = array_get($product_data, 'ItemAttributes.ManufacturerMinimumAge');
+        $product->weight = array_get($product_data, 'ItemAttributes.ItemDimensions.Weight');
+        $product->dimensions = array_get($product_data, 'ItemAttributes.PackageDimensions.Length').' x '.array_get($product_data, 'ItemAttributes.PackageDimensions.Width').' x '.array_get($product_data, 'ItemAttributes.PackageDimensions.Height');
+        $product->price = array_get($product_data, 'OfferSummary.LowestNewPrice.Amount');
+        $product->category_id = $category_id;
+        $product->save();
     }
 
     public function parseNode($node_id)
