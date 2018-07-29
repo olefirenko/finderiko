@@ -5,6 +5,13 @@
         <div class="footer-widget first-of-footer-widget">
         <a href="/"><img src="images/logo.jpg" class="logo-sm mb-10" alt="Finderiko"></a>
         <p>Copyright &copy; 2018 Finderiko. All Rights Reserved.</p>
+        <p>
+            <script type="text/javascript">                                                                                  (function () { var c = document.createElement('link'); c.type = 'text/css'; c.rel = 'stylesheet'; c.href = 'https://images.dmca.com/badges/dmca.css?ID=81ba0dcb-4a0f-4a26-9e36-bb83d8b35b50'; var h = document.getElementsByTagName("head")[0]; h.appendChild(c); })();</script>
+            <div id="DMCA-badge">
+                <div class="dm-1 dm-1-b" style="left: 0px; background-color: rgb(240, 89, 34);"><a href="https://www.dmca.com/" title="DMCA">DMCA</a></div>
+                <div class="dm-2 dm-2-b"><a href="http://www.dmca.com/Protection/Status.aspx?ID=81ba0dcb-4a0f-4a26-9e36-bb83d8b35b50" title="DMCA">PROTECTED</a></div>
+            </div>
+        </p>
         
         <h6 class="text-small">AFFILIATE DISCLOSURE</h6>
         <small>Some posts may contain affiliate links. Finderiko.com is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com.</small>
