@@ -6,11 +6,7 @@
         <a href="/"><img src="images/logo.jpg" class="logo-sm mb-10" alt="Finderiko"></a>
         <p>Copyright &copy; 2018 Finderiko. All Rights Reserved.</p>
         <p>
-            <script type="text/javascript">                                                                                  (function () { var c = document.createElement('link'); c.type = 'text/css'; c.rel = 'stylesheet'; c.href = 'https://images.dmca.com/badges/dmca.css?ID=81ba0dcb-4a0f-4a26-9e36-bb83d8b35b50'; var h = document.getElementsByTagName("head")[0]; h.appendChild(c); })();</script>
-            <div id="DMCA-badge">
-                <div class="dm-1 dm-1-b" style="left: 0px; background-color: rgb(240, 89, 34);"><a href="https://www.dmca.com/" title="DMCA">DMCA</a></div>
-                <div class="dm-2 dm-2-b"><a href="http://www.dmca.com/Protection/Status.aspx?ID=81ba0dcb-4a0f-4a26-9e36-bb83d8b35b50" title="DMCA">PROTECTED</a></div>
-            </div>
+            <a href="//www.dmca.com/Protection/Status.aspx?ID=81ba0dcb-4a0f-4a26-9e36-bb83d8b35b50" title="DMCA.com Protection Status" class="dmca-badge"> <img src="//images.dmca.com/Badges/_dmca_premi_badge_2.png?ID=81ba0dcb-4a0f-4a26-9e36-bb83d8b35b50" alt="DMCA.com Protection Status"></a> <script src="//images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
         </p>
         
         <h6 class="text-small">AFFILIATE DISCLOSURE</h6>
