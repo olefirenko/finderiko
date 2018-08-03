@@ -79,6 +79,7 @@ class AmazonParser extends Command
         // add category with root parent_id from ancestors
 
         $category = Category::where('name', ucwords($keyword))
+                            ->orWhere('name', 'like', '%'.$keyword.'%')
                             ->orWhere('name', str_plural(ucwords($keyword)))
                             ->first();
 
