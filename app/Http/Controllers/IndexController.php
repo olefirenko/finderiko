@@ -37,10 +37,23 @@ class IndexController extends Controller
             $bests_for_money->shift();
             $best_for_money = $bests_for_money->sortBy('price')->firstWhere('price', '>', 0);
 
-            $related_categories = Category::where('parent_id', $category->parent_id)
-                                          ->where('id', '!=', $category->id)
-                                          ->inRandomOrder()
-                                          ->limit(4)
+            $parts = explode(' ', $category->name);
+
+            $related_categories = Category::where('id', '!=', $category->id)
+                                          ->where('parent_id', '=', $category->parent_id)
+                                          ->where(function ($query) use ($parts) {
+                                                $query->where('name', 'like', '%'.$parts[0].'%');
+
+                                            $exclude = ['for', 'of'];
+                                            if (count($parts) > 1) {
+                                                for ($i = 1; $i < count($parts); $i++) {
+                                                    if (!in_array(strtolower($parts[$i]), $exclude)) {
+                                                        $query->orWhere('name', 'like', '%'.$parts[$i].'%');
+                                                    }
+                                                }
+                                            }
+                                          })
+                                          ->limit(5)
                                           ->get();
 
             SEO::setTitle('Top 10 '.str_plural($category->name).' ('.date('F Y').')');
