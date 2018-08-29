@@ -18,4 +18,9 @@ class Product extends Model
 
         return $range_price;
     }
+
+    public function getShortNameAttribute()
+    {
+        return str_before($this->attributes['name'], ',');
+    }
 }

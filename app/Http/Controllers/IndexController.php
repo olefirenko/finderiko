@@ -68,6 +68,13 @@ class IndexController extends Controller
         }
     }
 
+    public function search()
+    {
+        $categories = Category::where('title', 'like', '%'.request('query').'%')->get();
+
+        return view('pages.search', compact('categories'));
+    }
+
     public function deleteCategory($id)
     {
         // Category::find($id)->delete();

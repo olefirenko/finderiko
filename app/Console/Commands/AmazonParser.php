@@ -67,14 +67,16 @@ class AmazonParser extends Command
 
         $keywords = Keyword::all();
         foreach ($keywords as $keyword) {
-            $this->searchAmazon(trim(str_replace('best', '', $keyword->name)));
-            $keyword->delete();
+            $this->searchAmazon($keyword);
+            $keyword->delete($keyword);
             sleep(1);
         }
     }
 
-    protected function searchAmazon($keyword, $department = 'All')
+    protected function searchAmazon(Keyword $keyword_object, $department = 'All')
     {
+        $keyword = trim(str_replace('best', '', $keyword_object->name));
+
         // search by keyword
         // add category with root parent_id from ancestors
 
@@ -94,7 +96,7 @@ class AmazonParser extends Command
         $search->setResponseGroup(['BrowseNodes', 'Images', 'ItemAttributes', 'Offers', 'SalesRank']);
 
         $results = AmazonProduct::run($search);
-
+        
         if (array_get($results, 'Items.Request.IsValid')) {
             $category_id = 0;
 
@@ -136,6 +138,9 @@ class AmazonParser extends Command
                         $category->title = 'Best '.ucwords($keyword);
                         $category->image = array_get($product_data, 'LargeImage.URL');
                         $category->parent_id = $parent_category->id;
+                        $category->total_results = array_get($results, 'Items.TotalResults');
+                        $category->ahrefs_difficulty = $keyword_object->difficulty;
+                        $category->ahrefs_volume = $keyword_object->volume;
                         $category->save();
                     }
 

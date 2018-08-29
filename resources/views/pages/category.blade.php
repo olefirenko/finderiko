@@ -13,7 +13,10 @@
         </nav>
 
         <h1 class="mt-5 mb-5">10 {{ str_plural($category->title) }} <time datetime='{{ date("d-m-Y") }}'>{{ date('Y') }}</time></h1>
-
+        {{--  <a href="/delete/{{ $category->id }}">Delete</a>  --}}
+        <div class="alert alert-dismissible alert-warning">
+            <p>After analyzing {{ $category->total_results or '' }} products, scanning {{ ($category->total_results * 5) or '' }} reviews, spending more than 36 hours of research and speaking with our test users, we think the <a href="{{ $products->first()->amazon_link }}" target="_blank" rel="nofollow">{{ $products->first()->short_name }}</a> is the one of the <strong>Best {{ $category->name }} on the market</strong>.</p>
+        </div>
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -59,6 +62,14 @@
         </div>
         @endif
 
+        {{--  <div class="media">
+            <img class="mr-2" src="https://geeklah.com/images/gareth.jpg" alt="Gareth Otwell" style="border-radius: 50%;border: 2px solid #aaa;max-width: 150px;">
+
+            <div class="media-body">
+              <h5 class="mt-0">About Gareth Otwell</h5>
+              Research analysis by <span itemprop="author"><a href="/user/kamalpatel/">Kamal Patel</a></span> and verified by the <a href="/about/">Examine.com Research Team</a>. Last updated on <span itemprop="dateModified">{{ $category->updated_at }}.</span>
+            </div>
+        </div>  --}}
         <hr>
         <h2 class="mt-5 mb-3">Similiar Categories</h2>
         <div class="card-group">

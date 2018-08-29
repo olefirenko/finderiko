@@ -368,6 +368,9 @@ BUTTONS
 /* pill button */
 .btn-pills {
   border-radius: 50px;
+  border: 1px solid #f05922 !important;
+  background: #ffffff;
+  color: #f05922;
 }
 
 .btn-light {

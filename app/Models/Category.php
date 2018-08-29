@@ -42,9 +42,14 @@ class Category extends Model
         return $this->belongsTo(self::class, 'parent_id');
     }
 
+    public function author()
+    {
+        return $this->belongsTo(Author::class);
+    }
+
     public function subcategories()
     {
-        return $this->hasMany(self::class, 'parent_id');
+        return $this->hasMany(self::class, 'parent_id')->orderBy('name');
     }
 
     public function products()
