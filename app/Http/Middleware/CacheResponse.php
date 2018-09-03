@@ -50,7 +50,7 @@ class CacheResponse
      */
     protected function shouldCache($request, $response)
     {
-        return $request->isMethod('GET') && $response->getStatusCode() == 200;
+        return $request->isMethod('GET') && $response->getStatusCode() == 200 && !$request->is('search*');
     }
 
     /**
