@@ -82,3 +82,6 @@
     </div>
 </div>
 </footer>
+@if (Route::is('category'))
+<div id="amzn-assoc-ad-2af12fcc-522d-49c5-8f26-de7d252f95e1"></div><script async src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=2af12fcc-522d-49c5-8f26-de7d252f95e1"></script>
+@endif
