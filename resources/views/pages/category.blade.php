@@ -42,7 +42,7 @@
                             <br><b>(Editor’s Choice)</b>
                             @endif
 
-                            @if ($best_for_money->id == $product->id)
+                            @if ($best_for_money && $best_for_money->id == $product->id)
                             <br><b>(Best value for the money)</b>
                             @endif
                         </td>

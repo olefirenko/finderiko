@@ -37,24 +37,10 @@ class IndexController extends Controller
             $bests_for_money->shift();
             $best_for_money = $bests_for_money->sortBy('price')->firstWhere('price', '>', 0);
 
-            $parts = explode(' ', $category->name);
-
-            $related_categories = Category::where('id', '!=', $category->id)
-                                          ->where('parent_id', '=', $category->parent_id)
-                                          ->where(function ($query) use ($parts) {
-                                                $query->where('name', 'like', '%'.$parts[0].'%');
-
-                                            $exclude = ['for', 'of'];
-                                            if (count($parts) > 1) {
-                                                for ($i = 1; $i < count($parts); $i++) {
-                                                    if (!in_array(strtolower($parts[$i]), $exclude)) {
-                                                        $query->orWhere('name', 'like', '%'.$parts[$i].'%');
-                                                    }
-                                                }
-                                            }
-                                          })
-                                          ->limit(5)
-                                          ->get();
+            $related_categories = Category::findSimiliar($category->name, $category->id, 5, $category->parent_id);
+            if (!$related_categories->count()) {
+                $related_categories = Category::where('parent_id', $category->parent_id)->inRandomOrder()->limit(5)->get();
+            }
 
             SEO::setTitle('Top 10 '.str_plural($category->name).' ('.date('F Y').')');
             SEO::setDescription('Finderiko analyzes and compares all '.str_plural($category->name).' of '.date('Y').'. You can easily compare and choose from the 10 best '.str_plural($category->name).' for you.');
@@ -70,16 +56,55 @@ class IndexController extends Controller
 
     public function search()
     {
-        $categories = Category::where('title', 'like', '%'.request('query').'%')->get();
+        $categories = Category::findSimiliar(request('query'), null, 100);
 
         return view('pages.search', compact('categories'));
     }
 
     public function deleteCategory($id)
     {
-        // Category::find($id)->delete();
-        // Product::where('category_id', $id)->delete();
+        Category::find($id)->delete();
+        Product::where('category_id', $id)->delete();
 
-        // echo "Deleted";
+        echo "Deleted $id";
+    }
+
+    public function check_duplicates()
+    {
+        // ini_set('memory_limit', '-1');
+        $categories = Category::where('id', '>', 0)->limit(2000)->get();
+        $duplicates = [];
+
+        foreach ($categories as $key => $category) {
+            $similiar = Category::findSimiliar($category->name, $category->id, 5);
+            
+            if ($similiar->count()) {
+                echo '<h3>#'.$category->id.' '.$category->name.' <a href="/delete/'.$category->id.'" target="_blank">delete</a></h3>';
+                foreach ($similiar as $item) {
+                    $parts = explode(' ', $category->name);
+                    $name = $item->name;
+                    foreach ($parts as $part) {
+                        if (
+                            stripos($name, $part) !== false || 
+                            stripos($name, str_singular($part)) !== false || 
+                            stripos($name, str_plural($part)) !== false
+                        ) {
+                            $name = trim(str_ireplace([$part, str_singular($part), str_plural($part), 'for', 's'], '', $name));
+                        }
+                    }
+                    if (empty($name) && count($parts) == count(explode(' ', $item->name))) {
+                        echo $category->id.' deletedddd<br/>';
+                        //$this->deleteCategory($category->id);
+                        //break;
+                    }
+
+                        echo '<i style="color: '.($item->id > 16932 ? 'green' : 'red').'">#'.$item->id.' '.
+                        $name
+                        .' '.$item->score.'</i> <a href="/delete/'.$item->id.'" target="_blank">delete</a>'.
+                        $item->name.'<br/>'; 
+                }
+            }
+            
+        }
     }
 }

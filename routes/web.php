@@ -13,6 +13,7 @@
 
 Route::get('/', 'IndexController@index');
 Route::get('search', 'IndexController@search')->name('search');
+//Route::get('check_duplicates', 'IndexController@check_duplicates');
 Route::get('{slug}', 'IndexController@category')->name('category');
 Route::get('p/{slug}', ['as' => 'article', 'uses' => 'ArticleController@show']);
-Route::get('delete/{id}', 'IndexController@deleteCategory');
+//Route::get('delete/{id}', 'IndexController@deleteCategory');
