@@ -3,7 +3,7 @@
     <div class="row flex-column-reverse flex-sm-row flex-lg-row">
     <div class="col-md-4 col-12">
         <div class="footer-widget first-of-footer-widget">
-        <a href="/"><img src="images/logo.jpg" class="logo-sm mb-10" alt="Finderiko"></a>
+        <a href="/"><img src="/images/logo.jpg" class="logo-sm mb-10" alt="Finderiko"></a>
         <p>Copyright &copy; 2018 Finderiko. All Rights Reserved.</p>
         <p>
             <a href="//www.dmca.com/Protection/Status.aspx?ID=81ba0dcb-4a0f-4a26-9e36-bb83d8b35b50" title="DMCA.com Protection Status" class="dmca-badge"> <img src="//images.dmca.com/Badges/_dmca_premi_badge_2.png?ID=81ba0dcb-4a0f-4a26-9e36-bb83d8b35b50" alt="DMCA.com Protection Status"></a> <script src="//images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>

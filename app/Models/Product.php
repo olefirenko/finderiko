@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -21,6 +22,8 @@ class Product extends Model
 
     public function getShortNameAttribute()
     {
-        return str_before($this->attributes['name'], ',');
+        $initial = str_before($this->attributes['name'], ' -');
+        $initial = str_before($initial, ' –');
+        return Str::words(str_before($initial, ','), 10, '');
     }
 }

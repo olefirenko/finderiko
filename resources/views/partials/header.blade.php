@@ -5,7 +5,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <nav class="navbar navbar-expand-lg custom-menu custom-menu__light">
     <div class="container">
         <a class="navbar-brand" href="/">
-        <img src="images/logo.jpg" alt="Finderiko - Best Reviews" class="logo-md" width="180">
+        <img src="/images/logo.jpg" alt="Finderiko - Best Reviews" class="logo-md" width="180">
         </a>
         {{-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent"

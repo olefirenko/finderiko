@@ -63,20 +63,54 @@ class AmazonParser extends Command
         // $node_id = $this->ask('What is the node id you are going to fetch?');
 
         // $this->parseNode($node_id);
-        //$this->searchAmazon('blue lipstick');
+        //$this->searchAmazon(Keyword::first());
+        $is_update_categories = $this->ask('Update categories?');
 
-        $keywords = Keyword::all();
-        foreach ($keywords as $keyword) {
-            $this->searchAmazon($keyword);
-            $keyword->delete($keyword);
-            sleep(1);
+        if ($is_update_categories) {
+            Category::doesntHave('products')->chunk(200, function ($categories) {
+                foreach ($categories as $category) {
+                    // delete products
+                    $this->searchCategory($category);
+                    sleep(2);
+                }
+            });
+        } else {
+            $keywords = Keyword::limit(10)->get();
+            foreach ($keywords as $keyword) {
+                $this->searchAmazon($keyword);
+                $keyword->delete($keyword);
+                sleep(3);
+            }
+        }
+    }
+
+    protected function searchCategory(Category $category, $department = 'All')
+    {
+        $keyword = $category->name;
+        
+        $search = new Search();
+        $search->setCategory($department);
+        $search->setKeywords($keyword);
+        $search->setResponseGroup(['BrowseNodes', 'Images', 'ItemAttributes', 'Offers', 'SalesRank']);
+
+        $results = AmazonProduct::run($search);
+        
+        if (array_get($results, 'Items.Request.IsValid')) {
+            // if no results
+            if (!array_get($results, 'Items.Item')) {
+                Log::debug('No items for :'.$keyword);
+                return false;
+            }
+
+            foreach (array_get($results, 'Items.Item') as $key => $product_data) {
+                $this->parseAmazonProductArray($product_data, $category->id);
+            }
         }
     }
 
     protected function searchAmazon(Keyword $keyword_object, $department = 'All')
     {
         $keyword = trim(str_replace('best', '', $keyword_object->name));
-
         // search by keyword
         // add category with root parent_id from ancestors
 
@@ -192,6 +226,18 @@ class AmazonParser extends Command
         $product->weight = array_get($product_data, 'ItemAttributes.ItemDimensions.Weight');
         $product->dimensions = array_get($product_data, 'ItemAttributes.PackageDimensions.Length').' x '.array_get($product_data, 'ItemAttributes.PackageDimensions.Width').' x '.array_get($product_data, 'ItemAttributes.PackageDimensions.Height');
         $product->price = array_get($product_data, 'OfferSummary.LowestNewPrice.Amount');
+
+        $features = array_get($product_data, 'ItemAttributes.Feature');
+        $features_text = '';
+        if (is_array($features)) {
+            $features_text = '<ul>';
+            foreach ($features as $key => $feature) {
+                $features_text .= '<li>'.$feature.'</li>';
+            }
+            $features_text .= '</ul>';
+        }
+
+        $product->description = $features_text;
         $product->category_id = $category_id;
         $product->save();
     }

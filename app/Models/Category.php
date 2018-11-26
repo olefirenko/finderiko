@@ -71,4 +71,13 @@ class Category extends Model
             ->limit($limit)
             ->get();
     }
+
+    public function getTotalResultsAttribute($value)
+    {
+        if ($value > 1000) {
+            return rand(50, 999);
+        }
+
+        return $value;
+    }
 }

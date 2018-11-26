@@ -1822,3 +1822,34 @@ PADDING TOPS
 .fs-20 {
   font-size: 20px;
 }
+
+.pr_link {
+  position: relative;
+  float: right;
+  display: block;
+}
+
+a.pr_link::after {
+  content: url(/images/view_details.png);
+  position: absolute;
+  left: 24px;
+  bottom: 0;
+}
+
+.pr_link img {
+  max-height: 450px;
+  margin: 0 0 24px 24px;
+}
+
+#faqs .card-img-top:hover {
+  transform: scale(1.04);
+  -webkit-transform: scale(1.04);
+  -ms-transform: scale(1.04);
+}
+
+.fixed {
+  position: fixed;
+  top: 0;
+  max-width: 300px;
+  margin-top: 20px;
+}
