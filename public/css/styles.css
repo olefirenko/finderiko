@@ -1850,6 +1850,10 @@ a.pr_link::after {
 .fixed {
   position: fixed;
   top: 0;
-  max-width: 280px;
+  max-width: 270px;
   margin-top: 20px;
+}
+
+.products_navigation ul {
+  padding-left: 16px;
 }
