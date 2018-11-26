@@ -1850,6 +1850,6 @@ a.pr_link::after {
 .fixed {
   position: fixed;
   top: 0;
-  max-width: 300px;
+  max-width: 280px;
   margin-top: 20px;
 }
