@@ -35,7 +35,7 @@
                     <tr>
                         <th scope="row">{{ $key + 1 }}</th>
                         <td>
-                            <a href="{{ $product->amazon_link }}" class="image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" width="200" style="max-height: 250px"/></a>
+                            <a href="{{ $product->amazon_link }}" class="image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" width="200" style="max-height: 250px" alt="{{ $product->short_name }}"/></a>
                         </td>
                         <td>
                             {!! str_replace($product->short_name, '<a href="#product'.$key.'">'.$product->short_name.'</a>', $product->name) !!}
@@ -72,7 +72,7 @@
                     &ndash; Best Budget {{ title_case(str_singular($category->name)) }}
                     @endif
                 </h2>
-                <a href="{{ $product->amazon_link }}" class="pr_link m-5 text_image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" class="rounded" width="200"/></a>
+                <a href="{{ $product->amazon_link }}" class="pr_link m-5 text_image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" class="rounded" width="200" alt="{{ $product->short_name }}"/></a>
                 {!! $product->description !!}
                 </div>
                 @endforeach
