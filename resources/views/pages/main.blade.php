@@ -22,7 +22,7 @@
           @foreach ($popular_categories as $category)
           <div class="card">
             <a href="{{ route('category', $category->slug) }}">
-              <img class="card-img-top" src="{{ $category->image }}" alt="{{ $category->name }}" style="max-height: 300px">
+              <img class="card-img-top" src="{{ $category->image }}" alt="{{ $category->name }}" style="max-height: 300px" loading="lazy" />
             </a>
             <div class="card-body">
               <h5 class="card-title"><a href="{{ route('category', $category->slug) }}">{{ $category->name }}</a></h5>

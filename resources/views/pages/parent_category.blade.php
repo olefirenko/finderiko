@@ -17,7 +17,7 @@
         @foreach ($category->subcategories->take(48) as $subcategory)
         <div class="card col-md-3">
             <a href="{{ route('category', $subcategory->slug) }}">
-                <img class="card-img-top" src="{{ $subcategory->image }}" alt="{{ $subcategory->name }}" style="max-height: 300px">
+                <img class="card-img-top" src="{{ $subcategory->image }}" alt="{{ $subcategory->name }}" style="max-height: 300px" loading="lazy" />
             </a>
             <div class="card-body">
                 <h5 class="card-title"><a href="{{ route('category', $subcategory->slug) }}">{{ str_plural($subcategory->name) }}</a></h5>

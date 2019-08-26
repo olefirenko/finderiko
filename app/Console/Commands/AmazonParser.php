@@ -75,7 +75,7 @@ class AmazonParser extends Command
                 }
             });
         } else {
-            $keywords = Keyword::limit(10)->get();
+            $keywords = Keyword::where('name', 'best python book')->get();
             foreach ($keywords as $keyword) {
                 $this->searchAmazon($keyword);
                 $keyword->delete($keyword);

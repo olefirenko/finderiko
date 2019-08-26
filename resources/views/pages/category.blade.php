@@ -35,7 +35,7 @@
                     <tr>
                         <th scope="row">{{ $key + 1 }}</th>
                         <td>
-                            <a href="{{ $product->amazon_link }}" class="image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" width="200" style="max-height: 250px" alt="{{ $product->short_name }}"/></a>
+                            <a href="{{ $product->amazon_link }}" class="image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" width="200" style="max-height: 250px" alt="{{ $product->short_name }}" loading="lazy" /></a>
                         </td>
                         <td>
                             {!! str_replace($product->short_name, '<a href="#product'.$key.'">'.$product->short_name.'</a>', $product->name) !!}
@@ -111,7 +111,7 @@
             @foreach ($related_categories as $subcategory)
             <div class="card">
                 <a href="{{ route('category', $subcategory->slug) }}" class="card-img-top">
-                    <img class="card-img-top" src="{{ $subcategory->image }}" alt="{{ $subcategory->name }}" style="max-height: 250px">
+                    <img class="card-img-top" src="{{ $subcategory->image }}" alt="{{ $subcategory->name }}" style="max-height: 250px" loading="lazy" />
                 </a>
                 <div class="card-body">
                     <h5 class="card-title"><a href="{{ route('category', $subcategory->slug) }}">{{ str_plural($subcategory->name) }}</a></h5>
