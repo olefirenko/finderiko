@@ -72,7 +72,7 @@
                     &ndash; Best Budget {{ title_case(str_singular($category->name)) }}
                     @endif
                 </h2>
-                <a href="{{ $product->amazon_link }}" class="pr_link m-5 text_image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" class="rounded" width="200" alt="{{ $product->short_name }}"/></a>
+                <a href="{{ $product->amazon_link }}" class="pr_link m-5 text_image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" class="rounded" width="200" alt="{{ $product->short_name }}" loading="lazy"/></a>
                 {!! $product->description !!}
                 </div>
                 @endforeach
