@@ -17,7 +17,8 @@ class IndexController extends Controller
         $categories = Category::whereNull('parent_id')->where('is_popular', 1)->get();
 
         $popular_categories = Category::where('parent_id', '!=', null)
-                                      ->where('is_popular', 1)
+                                      //->where('is_popular', 1)
+                                      ->latest()
                                       ->limit(15)
                                       ->get();
 

@@ -49,7 +49,7 @@ class Category extends Model
 
     public function subcategories()
     {
-        return $this->hasMany(self::class, 'parent_id')->orderBy('name');
+        return $this->hasMany(self::class, 'parent_id');
     }
 
     public function products()
