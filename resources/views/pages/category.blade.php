@@ -49,7 +49,17 @@
                             </span>
                             <a href="{{ $product->amazon_link }}" class="btn btn-primary button{{ $key + 1 }} d-block d-sm-none mt-3" target="_blank" rel="nofollow">Check price</a>
                         </td>
-                        <td class="text-info font-weight-bold mh">{{ $product->brand }}</td>
+                        <td class="text-info font-weight-bold mh">
+                            @if ($product->brand)
+                                @if ($product->brand->count_products >= 10)
+                                    <a href="{{ route('brand', $product->brand->slug) }}">{{ $product->brand->name }}</a>
+                                @else
+                                    {{ $product->brand->name }}
+                                @endif
+                            @else
+                            N/A
+                            @endif
+                        </td>
                         <td class="font-weight-bold fs-20 mh">{!! $product->getPriceRange($step) !!}</td>
                         <td class="mh"><a href="{{ $product->amazon_link }}" class="btn btn-primary button{{ $key + 1 }}" target="_blank" rel="nofollow">Check price</a></td>
                     </tr>

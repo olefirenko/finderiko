@@ -14,6 +14,8 @@
 Route::get('/', 'IndexController@index');
 Route::get('search', 'IndexController@search')->name('search');
 //Route::get('check_duplicates', 'IndexController@check_duplicates');
+Route::get('brands', ['as' => 'brands', 'uses' => 'IndexController@brands']);
 Route::get('{slug}', 'IndexController@category')->name('category');
 Route::get('p/{slug}', ['as' => 'article', 'uses' => 'ArticleController@show']);
+Route::get('brands/{slug}', ['as' => 'brand', 'uses' => 'IndexController@brand']);
 //Route::get('delete/{id}', 'IndexController@deleteCategory');

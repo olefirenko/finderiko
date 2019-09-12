@@ -220,7 +220,7 @@ class AmazonParser extends Command
         $product->amazon_link = array_get($product_data, 'DetailPageURL');
         $product->sales_rank = array_get($product_data, 'SalesRank');
         $product->image = array_get($product_data, 'LargeImage.URL');
-        $product->brand = array_get($product_data, 'ItemAttributes.Brand');
+        $product->brand_name = array_get($product_data, 'ItemAttributes.Brand');
         $product->name = array_get($product_data, 'ItemAttributes.Title');
         $product->minimum_age_month = array_get($product_data, 'ItemAttributes.ManufacturerMinimumAge');
         $product->weight = array_get($product_data, 'ItemAttributes.ItemDimensions.Weight');

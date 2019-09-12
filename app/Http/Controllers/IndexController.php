@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use ApaiIO\Operations\Search;
+use App\Models\Brand;
 
 class IndexController extends Controller
 {
@@ -16,22 +17,27 @@ class IndexController extends Controller
     {
         $categories = Category::whereNull('parent_id')->where('is_popular', 1)->get();
 
+        $brands = Brand::whereNotNull('sales_rank_total')
+                        ->where('logo', '!=', '')
+                        ->orderBy('sales_rank_total')
+                        ->limit(10)
+                        ->get();
+
         $popular_categories = Category::where('parent_id', '!=', null)
                                       //->where('is_popular', 1)
                                       ->latest()
                                       ->limit(15)
                                       ->get();
 
-        return view('pages.main', compact('categories', 'popular_categories'));
+        return view('pages.main', compact('categories', 'popular_categories', 'brands'));
     }
 
     public function category($slug)
     {
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        
         if ($category->parent_id) {
-            $products = Product::where('category_id', $category->id)->get();
+            $products = Product::with('brand')->where('category_id', $category->id)->get();
             $step = $products->max('price') / 5;
 
             $bests_for_money = $products->take(6);
@@ -53,6 +59,36 @@ class IndexController extends Controller
 
             return view('pages.parent_category', compact('category'));
         }
+    }
+
+    public function brands()
+    {
+        $brands = Brand::whereNotNull('sales_rank_total')
+                        ->orderBy('sales_rank_total')
+                        ->limit(100)
+                        ->get();
+
+        SEO::setTitle('Top 100 Best Brands ('.date('F Y').')');
+        SEO::setDescription('Finderiko analyzes and compares all brands to determine which one are the best');
+
+        return view('pages.brands', compact('brands'));
+    }
+
+    public function brand($slug)
+    {
+        $brand = Brand::where('slug', $slug)->firstOrFail();
+        $products = $brand->products()
+                          ->with('category')
+                          ->limit(48)
+                          ->groupBy('name')
+                          ->get();
+
+        $categories = $brand->categories()->limit(6)->get();
+
+        SEO::setTitle('Best '.$brand->name.' Products ('.date('F Y').')');
+        SEO::setDescription('Finderiko analyzes and compares all '.$brand->name.' of '.date('Y').' products. You can easily compare and choose from the best '.$brand->name.' products.');
+
+        return view('pages.brand', compact('brand', 'products', 'categories'));
     }
 
     public function search()

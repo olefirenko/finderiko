@@ -36,6 +36,28 @@
 </section>
 </div>
 
+<section class="section-spacer pb-0 section--clients">
+    <div class="container">
+      <header class="section-header text-center w-100">
+        <h2 class="section-title">Top Brands</h2>
+      </header>
+      <div class="row">
+        <div class="col-12 mx-auto">
+          <div class="client-logo__wrapper">
+            @foreach ($brands as $brand)
+            <a href="{{ route('brand', $brand->slug) }}" class="client-logo">
+              <img src="{{ $brand->logo }}" alt="{{ $brand->name }}">
+            </a>
+            @endforeach
+          </div>
+          <div class="mt-40 text-center">
+              <a href="{{ route('brands') }}" class="btn btn-primary btn-lg">See all brands</a>
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 <section id="faqs" class="section-spacer section-faq border-bottom">
   <div class="container">
   <header class="section-header text-center">
