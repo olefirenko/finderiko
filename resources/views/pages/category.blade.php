@@ -14,7 +14,7 @@
 
         <h1 class="mt-5 mb-5">10 {{ str_plural($category->title) }} <time datetime='{{ date("d-m-Y") }}'>{{ date('Y') }}</time></h1>
         {{--  <a href="/delete/{{ $category->id }}">Delete</a>  --}}
-        <div class="alert alert-dismissible alert-warning">
+        <div class="alert alert-warning">
             <p>After analyzing {{ $category->total_results or '' }} products, scanning @if ($category->total_results){{ $category->total_results * 5 }}@endif reviews, spending more than 36 hours of research and speaking with our test users, we think the <a href="{{ $products->first()->amazon_link }}" class="toplink" target="_blank" rel="nofollow">{{ $products->first()->short_name }}</a> is the one of the <strong>Best {{ $category->name }} on the market</strong>.</p>
         </div>
         <div class="table-responsive">
@@ -22,34 +22,36 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col" class="hid">#</th>
                         <th scope="col">Image</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Brand</th>
-                        <th scope="col">Price</th>
-                        <th scope="col"></th>
+                        <th scope="col" class="mh">Brand</th>
+                        <th scope="col" class="mh">Price</th>
+                        <th scope="col" class="mh"></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($products as $key => $product)
                     <tr>
-                        <th scope="row">{{ $key + 1 }}</th>
+                        <td scope="row" class="hid">{{ $key + 1 }}</td>
                         <td>
+                            @if ($key == 0)
+                            <div class="t-plash">Editor’s Choice</div>
+                            @endif
+                            
+                            @if ($best_for_money && $best_for_money->id == $product->id)
+                            <div class="t-plash">Best value for the money</div>
+                            @endif
                             <a href="{{ $product->amazon_link }}" class="image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" width="200" style="max-height: 250px" alt="{{ $product->short_name }}" loading="lazy" /></a>
                         </td>
                         <td>
-                            {!! str_replace($product->short_name, '<a href="#product'.$key.'">'.$product->short_name.'</a>', $product->name) !!}
-                            @if ($key == 0)
-                            <br><b>(Editor’s Choice)</b>
-                            @endif
-
-                            @if ($best_for_money && $best_for_money->id == $product->id)
-                            <br><b>(Best value for the money)</b>
-                            @endif
+                            {!! str_replace($product->short_name, '<a href="#product'.$key.'">'.$product->short_name.'</a><span class="mh">', $product->name) !!}
+                            </span>
+                            <a href="{{ $product->amazon_link }}" class="btn btn-primary button{{ $key + 1 }} d-block d-sm-none mt-3" target="_blank" rel="nofollow">Check price</a>
                         </td>
-                        <td class="text-info font-weight-bold">{{ $product->brand }}</td>
-                        <td class="font-weight-bold fs-20">{!! $product->getPriceRange($step) !!}</td>
-                        <td><a href="{{ $product->amazon_link }}" class="btn btn-primary button{{ $key + 1 }}" target="_blank" rel="nofollow">Check price</a></td>
+                        <td class="text-info font-weight-bold mh">{{ $product->brand }}</td>
+                        <td class="font-weight-bold fs-20 mh">{!! $product->getPriceRange($step) !!}</td>
+                        <td class="mh"><a href="{{ $product->amazon_link }}" class="btn btn-primary button{{ $key + 1 }}" target="_blank" rel="nofollow">Check price</a></td>
                     </tr>
                     @endforeach
                 </tbody>

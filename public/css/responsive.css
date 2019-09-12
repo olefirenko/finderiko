@@ -114,8 +114,21 @@ RESPONSIVES
 }
 
 @media (max-width: 576px) {
-  body {
-    padding-top: 50px;
+  .navbar>.container, .navbar>.container-fluid {
+    justify-content: center;
+  }
+  .mh{
+    display: none;
+  }
+  .hid{
+    padding: 0 !important;
+    color: white;
+  }
+  .table-responsive img {
+    max-width: 150px;
+  }
+  .svg_patern {
+    padding-top: 0px;
   }
   .container {
     padding-right: 15px;

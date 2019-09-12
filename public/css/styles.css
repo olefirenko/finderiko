@@ -1857,3 +1857,35 @@ a.pr_link::after {
 .products_navigation ul {
   padding-left: 16px;
 }
+
+.t-plash {
+  margin: auto 0 15px -25px;
+  position: relative;
+  text-transform: uppercase;
+  background: #fff;
+  border: 2px solid #fe7900;
+  padding: 6px 34px;
+  max-width: max-content;
+  max-width: moz-max-content;
+  clear: both;
+  color: #000;
+  float: left;
+  font-weight: 700;
+  font-size: 12px!important;
+  word-break: keep-all;
+  border-bottom-right-radius: 10px;
+  border-top-left-radius: 10px;
+  line-height: 1;
+}
+
+.t-plash::before {
+  display: block;
+  width: 10px;
+  height: 0;
+  position: absolute;
+  bottom: -16px;
+  left: -3px;
+  content: "";
+  border-bottom: 14px solid transparent;
+  border-right: 9px solid #cc6507;
+}
