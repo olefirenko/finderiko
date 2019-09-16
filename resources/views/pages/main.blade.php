@@ -10,7 +10,7 @@
   <div class="product-device box-shadow d-none d-md-block"></div>
   <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
 </div>
-<div class="svg_patern">
+<div class="svg_patern pt-5">
 <section class="section-spacer pb-0 section--clients pt-0">
   <div class="container">
     <header class="section-header text-center w-100">
