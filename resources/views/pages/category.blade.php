@@ -34,7 +34,7 @@
                     @foreach ($products as $key => $product)
                     <tr>
                         <td scope="row" class="hid">{{ $key + 1 }}</td>
-                        <td>
+                        <td class="text-center">
                             @if ($key == 0)
                             <div class="t-plash">Editor’s Choice</div>
                             @endif
@@ -42,15 +42,32 @@
                             @if ($best_for_money && $best_for_money->id == $product->id)
                             <div class="t-plash">Best value for the money</div>
                             @endif
-                            <a href="{{ $product->amazon_link }}" class="image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" width="200" style="max-height: 250px" alt="{{ $product->short_name }}" loading="lazy" /></a>
+
+                            @if (in_array($product->id, array_keys($under_products)))
+                            <div class="t-plash">Best under ${{ $under_products[$product->id] }}</div>
+                            @endif
+                            <a href="{{ $product->amazon_link }}" class="image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" style="max-height: 250px;max-width: 200px" alt="{{ $product->short_name }}" loading="lazy" /></a>
                         </td>
                         <td>
                             {!! str_replace($product->short_name, '<a href="#product'.$key.'">'.$product->short_name.'</a><span class="mh">', $product->name) !!}
                             </span>
                             <a href="{{ $product->amazon_link }}" class="btn btn-primary button{{ $key + 1 }} d-block d-sm-none mt-3" target="_blank" rel="nofollow">Check price</a>
                         </td>
-                        <td class="text-info font-weight-bold mh">{{ $product->brand }}</td>
-                        <td class="font-weight-bold fs-20 mh">{!! $product->getPriceRange($step) !!}</td>
+                        <td class="text-info font-weight-bold mh">
+                            {{-- @if ($product->brand)
+                                @if ($product->brand->count_products >= 10)
+                                    <a href="{{ route('brand', $product->brand->slug) }}">{{ $product->brand->name }}</a>
+                                @else
+                                    {{ $product->brand->name }}
+                                @endif
+                            @else
+                            N/A
+                            @endif --}}
+                            {{ $product->brand_name ?? 'N/A' }}
+                        </td>
+                        <td class="font-weight-bold fs-20 mh">
+                            {!! $product->getPriceRange($step) !!}
+                        </td>
                         <td class="mh"><a href="{{ $product->amazon_link }}" class="btn btn-primary button{{ $key + 1 }}" target="_blank" rel="nofollow">Check price</a></td>
                     </tr>
                     @endforeach
@@ -73,8 +90,11 @@
                     <?php $budget_product_key = $key;?>
                     &ndash; Best Budget {{ title_case(str_singular($category->name)) }}
                     @endif
+                    @if (in_array($product->id, array_keys($under_products)))
+                    &ndash; Best under ${{ $under_products[$product->id] }}
+                    @endif
                 </h2>
-                <a href="{{ $product->amazon_link }}" class="pr_link m-5 text_image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" class="rounded" width="200" alt="{{ $product->short_name }}" loading="lazy"/></a>
+                <a href="{{ $product->amazon_link }}" class="pr_link m-5 text_image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" class="rounded" style="max-width: 250px" alt="{{ $product->short_name }}" loading="lazy"/></a>
                 {!! $product->description !!}
                 </div>
                 @endforeach
@@ -92,6 +112,9 @@
                     <ul>
                         <li><a href="#tentable">Our Top 10 {{ $category->title }}</a></li>
                         <li><a href="#product0">Best Overall {{ title_case(str_singular($category->name)) }}</a></li>
+                        @foreach ($under_products as $key => $item)
+                        <li><a href="#product{{ $products->firstWhere('id', $key)->position - 1 }}">Best Under ${{ $item }}</a></li>                        
+                        @endforeach
                         <li><a href="#product{{ $budget_product_key }}">Best Budget {{ title_case(str_singular($category->name)) }}</a></li>
                         <li><a href="#similiar">Similiar Products</a></li>
                     </ul>
@@ -111,9 +134,9 @@
         <h2 id="similiar" class="mt-5 mb-3">Similiar Categories</h2>
         <div class="card-group">
             @foreach ($related_categories as $subcategory)
-            <div class="card">
+            <div class="card text-center">
                 <a href="{{ route('category', $subcategory->slug) }}" class="card-img-top">
-                    <img class="card-img-top" src="{{ $subcategory->image }}" alt="{{ $subcategory->name }}" style="max-height: 250px" loading="lazy" />
+                    <img src="{{ $subcategory->image }}" alt="{{ $subcategory->name }}" style="max-height: 250px;max-width:200px" loading="lazy" />
                 </a>
                 <div class="card-body">
                     <h5 class="card-title"><a href="{{ route('category', $subcategory->slug) }}">{{ str_plural($subcategory->name) }}</a></h5>

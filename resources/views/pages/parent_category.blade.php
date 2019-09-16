@@ -15,9 +15,9 @@
 
         <div class="row">
         @foreach ($category->subcategories()->inRandomOrder()->take(48)->get() as $subcategory)
-        <div class="card col-md-3">
+        <div class="card col-md-4 flex-row align-items-center p-3">
             <a href="{{ route('category', $subcategory->slug) }}">
-                <img class="card-img-top" src="{{ $subcategory->image }}" alt="{{ $subcategory->name }}" style="max-height: 300px" loading="lazy" />
+                <img src="{{ $subcategory->image }}" alt="{{ $subcategory->name }}" style="max-width:200px;max-height: 250px" loading="lazy" />
             </a>
             <div class="card-body">
                 <h5 class="card-title"><a href="{{ route('category', $subcategory->slug) }}">{{ str_plural($subcategory->name) }}</a></h5>

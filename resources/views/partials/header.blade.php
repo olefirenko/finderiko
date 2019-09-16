@@ -20,10 +20,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </button> --}}
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-lg-auto float-left">
-        <li class="nav-item active">
-            <a class="nav-link" href="/#departments">All Categories
+        <li class="nav-item">
+            <a class="nav-link" href="/#departments">Categories
             </a>
         </li>
+        {{-- <li class="nav-item">
+            <a class="nav-link" href="{{ route('brands') }}">Brands
+            </a>
+        </li> --}}
         </ul>
         <form class="form-inline mt-2 mt-md-0" action="{{ route('search') }}">
             <input class="form-control mr-sm-2" type="text" name="query" value="{{ request('query') }}" placeholder="Search" aria-label="Search">

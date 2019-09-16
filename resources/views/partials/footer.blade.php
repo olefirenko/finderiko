@@ -7,7 +7,7 @@
                     <p>Copyright &copy; 2018 Finderiko. All Rights Reserved.</p>
                     <p>Our <a href="https://twitter.com/finderiko" target="_blank" rel="nofollow">Twitter</a> and <a href="https://www.facebook.com/finderiko" target="_blank" rel="nofollow">Facebook</a></p>
                     <p>
-                        <a href="//www.dmca.com/Protection/Status.aspx?ID=81ba0dcb-4a0f-4a26-9e36-bb83d8b35b50" title="DMCA.com Protection Status" class="dmca-badge"> <img src="//images.dmca.com/Badges/_dmca_premi_badge_2.png?ID=81ba0dcb-4a0f-4a26-9e36-bb83d8b35b50" alt="DMCA.com Protection Status"></a> <script src="//images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
+                        <a href="//www.dmca.com/Protection/Status.aspx?ID=81ba0dcb-4a0f-4a26-9e36-bb83d8b35b50" title="DMCA.com Protection Status" class="dmca-badge"> <img src="//images.dmca.com/Badges/_dmca_premi_badge_2.png?ID=81ba0dcb-4a0f-4a26-9e36-bb83d8b35b50" alt="DMCA.com Protection Status" loading="lazy"></a> <script src="//images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
                     </p>
                     
                     <h6 class="text-small">AFFILIATE DISCLOSURE</h6>

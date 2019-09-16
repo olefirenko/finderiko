@@ -114,6 +114,10 @@ RESPONSIVES
 }
 
 @media (max-width: 576px) {
+  h1, h2, h3 {
+    line-height: 1;
+  }
+
   .navbar>.container, .navbar>.container-fluid {
     justify-content: center;
   }
@@ -125,7 +129,7 @@ RESPONSIVES
     color: white;
   }
   .table-responsive img {
-    max-width: 150px;
+    max-width: 150px !important;
   }
   .svg_patern {
     padding-top: 0px;

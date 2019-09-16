@@ -80,4 +80,9 @@ class Category extends Model
 
         return $value;
     }
+
+    public function getShortTitleAttribute()
+    {
+        return str_replace('Best ', '', $this->title);
+    }
 }
