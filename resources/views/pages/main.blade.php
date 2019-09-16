@@ -20,9 +20,9 @@
       <div class="col-12 mx-auto">
         <div class="card-columns">
           @foreach ($popular_categories as $category)
-          <div class="card">
+          <div class="card text-center">
             <a href="{{ route('category', $category->slug) }}">
-              <img class="card-img-top" src="{{ $category->image }}" alt="{{ $category->name }}" style="max-height: 300px" loading="lazy" />
+              <img src="{{ $category->image }}" alt="{{ $category->name }}" style="max-width:300px;max-height: 300px" loading="lazy" />
             </a>
             <div class="card-body">
               <h5 class="card-title"><a href="{{ route('category', $category->slug) }}">{{ $category->name }}</a></h5>
@@ -36,7 +36,7 @@
 </section>
 </div>
 
-<section class="section-spacer pb-0 section--clients">
+{{-- <section class="section-spacer pb-0 section--clients">
     <div class="container">
       <header class="section-header text-center w-100">
         <h2 class="section-title">Top Brands</h2>
@@ -46,7 +46,7 @@
           <div class="client-logo__wrapper">
             @foreach ($brands as $brand)
             <a href="{{ route('brand', $brand->slug) }}" class="client-logo">
-              <img src="{{ $brand->logo }}" alt="{{ $brand->name }}">
+              <img src="https://aooljjncam.cloudimg.io/width/300/x/{{ $brand->logo }}" alt="{{ $brand->name }}" loading="lazy">
             </a>
             @endforeach
           </div>
@@ -56,7 +56,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> --}}
 
 <section id="faqs" class="section-spacer section-faq border-bottom">
   <div class="container">

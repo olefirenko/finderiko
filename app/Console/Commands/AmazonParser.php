@@ -14,6 +14,7 @@ use Illuminate\Console\Command;
 use ApaiIO\Operations\BrowseNodeLookup;
 use ApaiIO\Configuration\GenericConfiguration;
 use Revolution\Amazon\ProductAdvertising\Facades\AmazonProduct;
+use App\Models\Brand;
 
 class AmazonParser extends Command
 {
@@ -103,7 +104,7 @@ class AmazonParser extends Command
             }
 
             foreach (array_get($results, 'Items.Item') as $key => $product_data) {
-                $this->parseAmazonProductArray($product_data, $category->id);
+                $this->parseAmazonProductArray($product_data, $category->id, $key + 1);
             }
         }
     }
@@ -181,7 +182,7 @@ class AmazonParser extends Command
                     $category_id = $category->id;
                 }
 
-                $this->parseAmazonProductArray($product_data, $category_id);
+                $this->parseAmazonProductArray($product_data, $category_id, $key + 1);
             }
         }
     }
@@ -208,12 +209,12 @@ class AmazonParser extends Command
 
         if (array_get($results, 'Items.Request.IsValid')) {
             foreach (array_get($results, 'Items.Item') as $key => $product_data) {
-                $this->parseAmazonProductArray($product_data, $category_id);
+                $this->parseAmazonProductArray($product_data, $category_id, $key + 1);
             }
         }
     }
 
-    protected function parseAmazonProductArray(array $product_data = [], int $category_id)
+    protected function parseAmazonProductArray(array $product_data = [], int $category_id, $position = null)
     {
         $product = new Product;
         $product->ASIN = array_get($product_data, 'ASIN');
@@ -226,7 +227,16 @@ class AmazonParser extends Command
         $product->weight = array_get($product_data, 'ItemAttributes.ItemDimensions.Weight');
         $product->dimensions = array_get($product_data, 'ItemAttributes.PackageDimensions.Length').' x '.array_get($product_data, 'ItemAttributes.PackageDimensions.Width').' x '.array_get($product_data, 'ItemAttributes.PackageDimensions.Height');
         $product->price = array_get($product_data, 'OfferSummary.LowestNewPrice.Amount');
+        $product->position = $position;
 
+        if ($product->brand_name) {
+            $brand = Brand::firstOrCreate([
+                'name' => $product->brand_name,
+            ]);
+    
+            $product->brand_id = $brand->id;
+        }
+        
         $features = array_get($product_data, 'ItemAttributes.Feature');
         $features_text = '';
         if (is_array($features)) {

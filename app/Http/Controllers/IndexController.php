@@ -3,12 +3,8 @@
 namespace App\Http\Controllers;
 
 use SEO;
-use AmazonProduct;
-use App\Models\Keyword;
 use App\Models\Product;
 use App\Models\Category;
-use Illuminate\Http\Request;
-use ApaiIO\Operations\Search;
 use App\Models\Brand;
 
 class IndexController extends Controller
@@ -44,6 +40,33 @@ class IndexController extends Controller
             $bests_for_money->shift();
             $best_for_money = $bests_for_money->sortBy('price')->firstWhere('price', '>', 0);
 
+            // best unders
+            $under_prices = [100000, 50000, 20000, 15000, 10000, 5000]; // in cents
+            $min = $products->min('price');
+            $max = $products->max('price');
+            $under_products = [];
+
+            foreach ($under_prices as $key => $item) {
+                if (
+                    $min <= $item && 
+                    $item <= $max &&
+                    $products
+                            ->whereNotIn('id', [$best_for_money->id, $products->first()->id])
+                            ->where('price', '<=', $item)
+                            ->where('price', '!=', null)
+                            ->first()
+                ) {
+                    $under_products[
+                        $products
+                            ->whereNotIn('id', [$best_for_money->id, $products->first()->id])
+                            ->where('price', '<=', $item)
+                            ->where('price', '!=', null)
+                            ->first()
+                            ->id
+                    ] = $item / 100;
+                 }
+            }
+
             $related_categories = Category::findSimiliar($category->name, $category->id, 5, $category->parent_id);
             if (!$related_categories->count()) {
                 $related_categories = Category::where('parent_id', $category->parent_id)->inRandomOrder()->limit(5)->get();
@@ -52,7 +75,7 @@ class IndexController extends Controller
             SEO::setTitle('Top 10 '.str_plural($category->name).' ('.date('F Y').')');
             SEO::setDescription('Finderiko analyzes and compares all '.str_plural($category->name).' of '.date('Y').'. You can easily compare and choose from the 10 best '.str_plural($category->name).' for you.');
 
-            return view('pages.category', compact('category', 'products', 'step', 'related_categories', 'best_for_money'));
+            return view('pages.category', compact('category', 'products', 'step', 'related_categories', 'best_for_money', 'under_products'));
         } else {
             SEO::setTitle(str_plural($category->name));
             SEO::setDescription('Finderiko analyzes and compares all '.str_plural($category->name).' of '.date('Y').'. You can easily compare and choose from the best '.str_plural($category->name));
@@ -76,7 +99,7 @@ class IndexController extends Controller
 
     public function brand($slug)
     {
-        $brand = Brand::where('slug', $slug)->firstOrFail();
+        $brand = Brand::shouldBeShown()->where('slug', $slug)->firstOrFail();
         $products = $brand->products()
                           ->with('category')
                           ->limit(48)
@@ -86,7 +109,7 @@ class IndexController extends Controller
         $categories = $brand->categories()->limit(6)->get();
 
         SEO::setTitle('Best '.$brand->name.' Products ('.date('F Y').')');
-        SEO::setDescription('Finderiko analyzes and compares all '.$brand->name.' of '.date('Y').' products. You can easily compare and choose from the best '.$brand->name.' products.');
+        SEO::setDescription('Finderiko analyzes and compares all '.$brand->name.' products of '.date('Y').'. You can easily compare and choose from the best '.$brand->name.' products.');
 
         return view('pages.brand', compact('brand', 'products', 'categories'));
     }

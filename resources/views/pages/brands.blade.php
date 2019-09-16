@@ -13,9 +13,9 @@
 
         <h1 class="mt-5 mb-5">💯 Top 100 Best Brands <time datetime='{{ date("d-m-Y") }}'>{{ date('Y') }}</time></h1>
         {{--  <a href="/delete/{{ $category->id }}">Delete</a>  --}}
-        <div class="alert alert-dismissible alert-warning">
+        {{-- <div class="alert alert-dismissible alert-warning">
             <p>After analyzing </p>
-        </div>
+        </div> --}}
         <div class="table-responsive">
             <a name="tentable"></a>
             <table class="table">
@@ -24,7 +24,6 @@
                         <th scope="col">#</th>
                         <th scope="col">Image</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Total Products</th>
                         <th scope="col">Department</th>
                         <th scope="col"></th>
                     </tr>
@@ -34,18 +33,13 @@
                     <tr>
                         <th scope="row">{{ $key + 1 }}</th>
                         <td>
-                            <img src="{{ $brand->logo }}" alt="{{ $brand->name }}" width="300"/>
+                            <img src="https://aooljjncam.cloudimg.io/width/300/x/{{ $brand->logo }}" alt="{{ $brand->name }}" title="{{ $brand->name }}" style="max-width:300px;max-height:300px" loading="lazy"/>
                         </td>
                         <td>
                             {{ $brand->name }}
                         </td>
                         <td class="text-info font-weight-bold">
-                            {{ $brand->count_products }}                            
-                        </td>
-                        <td class="font-weight-bold fs-20">
-                            @if ($brand->parent_categories->first())
-                            {{ $brand->parent_categories->first()->name }}          
-                            @endif                  
+                            {{ $brand->category->name }}
                         </td>
                         <td><a href="{{ route('brand', $brand->slug) }}" class="btn btn-primary"">Details</a></td>
                     </tr>

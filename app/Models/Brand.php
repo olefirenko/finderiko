@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Brand extends Model
 {
@@ -44,6 +45,11 @@ class Brand extends Model
                     ->orderBy('sales_rank');
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'products')->groupBy('name');
@@ -52,5 +58,10 @@ class Brand extends Model
     public function parent_categories()
     {
         return $this->belongsToMany(Category::class, 'products')->whereNull('parent_id');
+    }
+
+    public function scopeShouldBeShown(Builder $builder)
+    {
+        $builder->where('count_products', '>=', 10);
     }
 }

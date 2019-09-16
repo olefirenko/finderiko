@@ -33,8 +33,8 @@
                         </div>
                         <div class="col-sm-5">
                             <div class="feature-list-image">
-                                <img src="{{ $brand->logo }}" class="img-fluid"
-                                    alt="{{ $brand->name }}">
+                                <img src="https://aooljjncam.cloudimg.io/width/300/x/{{ $brand->logo }}" class="img-fluid"
+                                    alt="{{ $brand->name }}" title="{{ $brand->name }}" loading="lazy">
                             </div>
                         </div>
                     </div>
@@ -45,16 +45,14 @@
 
             <div class="row">
                 @foreach ($products as $key => $product)
-                <div class="card col-md-3">
-                    <a href="{{ $product->amazon_link }}" target="_blank" rel="nofollow">
-                        <img class="card-img-top" src="{{ $product->image }}" style="max-height: 300px"
+                <div class="card col-md-3 text-center">
+                    <a href="{{ route('category', $product->category->slug) }}#product{{ $product->position - 1 }}">
+                        <img src="{{ $product->image }}" style="max-height: 250px;max-width: 250px;"
                             alt="{{ $product->short_name }}" loading="lazy" />
                     </a>
                     <div class="card-body">
-                        <h5 class="card-title"><a href="{{ $product->amazon_link }}" target="_blank"
-                                rel="nofollow">{{ trim(str_replace($brand->name, '', $product->short_name)) }}</a></h5>
-                        <span class="badge badge-primary"><a class="text-white"
-                                href="{{ route('category', $product->category->slug) }}">{{ $product->category->short_title }}</a></span>
+                        <h5 class="card-title"><a href="{{ route('category', $product->category->slug) }}#product{{ $product->position - 1 }}">{{ trim(str_replace($brand->name, '', $product->short_name)) }}</a></h5>
+                        <span class="badge badge-primary">#{{ $product->position }} in {{ $product->category->short_title }}</span>
                     </div>
                 </div>
                 @endforeach
