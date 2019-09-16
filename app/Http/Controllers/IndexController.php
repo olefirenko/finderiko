@@ -36,7 +36,7 @@ class IndexController extends Controller
             $products = Product::with('brand')->where('category_id', $category->id)->get();
             $step = $products->max('price') / 5;
 
-            $premium = $products->sortByDesc('price')->firstWhere('price', '>', 0);
+            $premium = $products->whereNotIn('id', [$products->first()->id])->sortByDesc('price')->firstWhere('price', '>', 0);
 
             $bests_for_money = $products->take(6);
             $bests_for_money->shift();
