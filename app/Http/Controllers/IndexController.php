@@ -36,6 +36,8 @@ class IndexController extends Controller
             $products = Product::with('brand')->where('category_id', $category->id)->get();
             $step = $products->max('price') / 5;
 
+            $premium = $products->sortByDesc('price')->firstWhere('price', '>', 0);
+
             $bests_for_money = $products->take(6);
             $bests_for_money->shift();
             $best_for_money = $bests_for_money->sortBy('price')->firstWhere('price', '>', 0);
@@ -51,14 +53,14 @@ class IndexController extends Controller
                     $min <= $item && 
                     $item <= $max &&
                     $products
-                            ->whereNotIn('id', [$best_for_money->id, $products->first()->id])
+                            ->whereNotIn('id', [$best_for_money->id, $products->first()->id, $premium->id])
                             ->where('price', '<=', $item)
                             ->where('price', '!=', null)
                             ->first()
                 ) {
                     $under_products[
                         $products
-                            ->whereNotIn('id', [$best_for_money->id, $products->first()->id])
+                            ->whereNotIn('id', [$best_for_money->id, $products->first()->id, $premium->id])
                             ->where('price', '<=', $item)
                             ->where('price', '!=', null)
                             ->first()
@@ -75,7 +77,7 @@ class IndexController extends Controller
             SEO::setTitle('Top 10 '.str_plural($category->name).' ('.date('F Y').')');
             SEO::setDescription('Finderiko analyzes and compares all '.str_plural($category->name).' of '.date('Y').'. You can easily compare and choose from the 10 best '.str_plural($category->name).' for you.');
 
-            return view('pages.category', compact('category', 'products', 'step', 'related_categories', 'best_for_money', 'under_products'));
+            return view('pages.category', compact('category', 'products', 'step', 'related_categories', 'best_for_money', 'under_products', 'premium'));
         } else {
             SEO::setTitle(str_plural($category->name));
             SEO::setDescription('Finderiko analyzes and compares all '.str_plural($category->name).' of '.date('Y').'. You can easily compare and choose from the best '.str_plural($category->name));

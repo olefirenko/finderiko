@@ -36,11 +36,15 @@
                         <td scope="row" class="hid">{{ $key + 1 }}</td>
                         <td class="text-center">
                             @if ($key == 0)
-                            <div class="t-plash">Editor’s Choice</div>
+                            <div class="t-plash">⭐Best Choice</div>
                             @endif
                             
                             @if ($best_for_money && $best_for_money->id == $product->id)
-                            <div class="t-plash">Best value for the money</div>
+                            <div class="t-plash">💲Best value for the money</div>
+                            @endif
+
+                            @if ($premium && $premium->id == $product->id)
+                            <div class="t-plash">👑Premium Pick</div>
                             @endif
 
                             @if (in_array($product->id, array_keys($under_products)))
@@ -77,7 +81,6 @@
 
         <div class="row">
             <div class="col-md-9">
-                <?php $budget_product_key = 0;?>
                 @foreach ($products as $key => $product)
                 <div class="m-1 clearfix">
                 <h2>
@@ -87,9 +90,13 @@
                     @endif
                     
                     @if ($best_for_money && $best_for_money->id == $product->id)
-                    <?php $budget_product_key = $key;?>
                     &ndash; Best Budget {{ title_case(str_singular($category->name)) }}
                     @endif
+
+                    @if ($premium && $premium->id == $product->id)
+                    &ndash; Premium Pick
+                    @endif
+
                     @if (in_array($product->id, array_keys($under_products)))
                     &ndash; Best under ${{ $under_products[$product->id] }}
                     @endif
@@ -111,11 +118,12 @@
                     <h4>Navigate out top 10 {{ str_plural($category->title) }}</h4>
                     <ul>
                         <li><a href="#tentable">Our Top 10 {{ $category->title }}</a></li>
-                        <li><a href="#product0">Best Overall {{ title_case(str_singular($category->name)) }}</a></li>
+                        <li><a href="#product0">⭐Best Overall {{ title_case(str_singular($category->name)) }}</a></li>
                         @foreach ($under_products as $key => $item)
                         <li><a href="#product{{ $products->firstWhere('id', $key)->position - 1 }}">Best Under ${{ $item }}</a></li>                        
                         @endforeach
-                        <li><a href="#product{{ $budget_product_key }}">Best Budget {{ title_case(str_singular($category->name)) }}</a></li>
+                        <li><a href="#product{{ $best_for_money->position - 1  }}">💲Best Budget {{ title_case(str_singular($category->name)) }}</a></li>
+                        <li><a href="#product{{ $premium->position - 1 }}">👑Premium Pick</a></li>
                         <li><a href="#similiar">Similiar Products</a></li>
                     </ul>
                 </div>
