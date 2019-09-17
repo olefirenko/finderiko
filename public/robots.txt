@@ -15,9 +15,6 @@ Disallow: /
 User-agent: Zealbot
 Disallow: /
 
-User-agent: MSIECrawler
-Disallow: /
-
 User-agent: SiteSnagger
 Disallow: /
 
@@ -90,24 +87,13 @@ Disallow: /
 User-agent: AhrefsBot
 Disallow: /
 
-User-agent: Twitterbot
-Disallow: /
-
-User-agent: bingbot
-Disallow: /
-
 User-agent: Slurp
 Disallow: /
 
 User-agent: MJ12bot
 Disallow: /
 
-User-agent: msnbot-media
-Disallow: /
-
-
 
 User-Agent: *
-Crawl-delay: 10
 Host: finderiko.com
 Sitemap: https://finderiko.com/sitemap.xml
