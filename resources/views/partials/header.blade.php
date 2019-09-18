@@ -24,10 +24,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <a class="nav-link" href="/#departments">Categories
             </a>
         </li>
-        {{-- <li class="nav-item">
+        <li class="nav-item">
             <a class="nav-link" href="{{ route('brands') }}">Brands
             </a>
-        </li> --}}
+        </li>
         </ul>
         <form class="form-inline mt-2 mt-md-0" action="{{ route('search') }}">
             <input class="form-control mr-sm-2" type="text" name="query" value="{{ request('query') }}" placeholder="Search" aria-label="Search">

@@ -36,7 +36,7 @@
 </section>
 </div>
 
-{{-- <section class="section-spacer pb-0 section--clients">
+<section class="section-spacer pb-0 section--clients">
     <div class="container">
       <header class="section-header text-center w-100">
         <h2 class="section-title">Top Brands</h2>
@@ -56,7 +56,7 @@
         </div>
       </div>
     </div>
-  </section> --}}
+  </section>
 
 <section id="faqs" class="section-spacer section-faq border-bottom">
   <div class="container">

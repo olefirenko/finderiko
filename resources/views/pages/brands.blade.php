@@ -33,7 +33,7 @@
                     <tr>
                         <th scope="row">{{ $key + 1 }}</th>
                         <td>
-                            <img src="https://aooljjncam.cloudimg.io/width/300/x/{{ $brand->logo }}" alt="{{ $brand->name }}" title="{{ $brand->name }}" style="max-width:300px;max-height:300px" loading="lazy"/>
+                            <a href="{{ route('brand', $brand->slug) }}"><img src="https://aooljjncam.cloudimg.io/width/300/x/{{ $brand->logo }}" alt="{{ $brand->name }}" title="{{ $brand->name }}" style="max-width:300px;max-height:300px" loading="lazy"/></a>
                         </td>
                         <td>
                             {{ $brand->name }}
@@ -41,7 +41,7 @@
                         <td class="text-info font-weight-bold">
                             {{ $brand->category->name }}
                         </td>
-                        <td><a href="{{ route('brand', $brand->slug) }}" class="btn btn-primary"">Details</a></td>
+                        <td><a href="{{ route('brand', $brand->slug) }}" class="btn btn-primary">Details</a></td>
                     </tr>
                     @endforeach
                 </tbody>
