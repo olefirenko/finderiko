@@ -49,7 +49,7 @@ class SitemapGenerator extends Command
         $sitemap->setFilename('sitemap');
 
         foreach ($categories as $key => $category) {
-            $sitemap->addItem(route('category', $category->slug));
+            $sitemap->addItem(route('category', $category->slug), '0.8', 'monthly', 'Today');
         }
 
         $sitemap->createSitemapIndex(config('app.url'));

@@ -72,7 +72,7 @@ class AmazonParser extends Command
                 foreach ($categories as $category) {
                     // delete products
                     $this->searchCategory($category);
-                    sleep(2);
+                    sleep(1);
                 }
             });
         } else {
