@@ -14,6 +14,7 @@ class IndexController extends Controller
         $categories = Category::whereNull('parent_id')->where('is_popular', 1)->get();
 
         $brands = Brand::whereNotNull('sales_rank_total')
+                        ->has('category')
                         ->where('logo', '!=', '')
                         ->orderBy('sales_rank_total')
                         ->limit(10)
@@ -89,6 +90,7 @@ class IndexController extends Controller
     public function brands()
     {
         $brands = Brand::whereNotNull('sales_rank_total')
+                        ->has('category')
                         ->orderBy('sales_rank_total')
                         ->limit(100)
                         ->get();

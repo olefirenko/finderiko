@@ -1257,6 +1257,11 @@ BACKGROUND COLORS AND SHAPES COLORS
   color: #FD7D44;
 }
 
+.bg-dimped__primary-orange {
+  background-color: #f05922;
+  color: #fff;
+}
+
 .bg-dimped__danger {
   background-color: rgba(220, 53, 69, 0.2);
   color: #dc3545;
@@ -1577,7 +1582,7 @@ ICONS AND SHAPES
   max-width: 60px;
   max-height: 60px;
   line-height: 60px;
-  font-size: calc(60px / 2);
+  font-size: 25px;
 }
 
 .u-icon__xl {
@@ -1888,4 +1893,12 @@ a.pr_link::after {
   content: "";
   border-bottom: 14px solid transparent;
   border-right: 9px solid #cc6507;
+}
+
+/* .discount-block:hover {
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+} */
+
+.discount-block:hover .btn{
+  display: inline-block !important;
 }

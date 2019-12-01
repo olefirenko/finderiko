@@ -104,6 +104,7 @@ class AmazonParser extends Command
             }
 
             foreach (array_get($results, 'Items.Item') as $key => $product_data) {
+                //dd($category->id);
                 $this->parseAmazonProductArray($product_data, $category->id, $key + 1);
             }
         }

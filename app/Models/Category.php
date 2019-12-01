@@ -57,6 +57,11 @@ class Category extends Model
         return $this->hasMany(Product::class);
     }
 
+    public function deals()
+    {
+        return $this->hasMany(Deal::class)->whereNotNull('image')->groupBy('brand_id')->orderByDesc('percentage_saved')->take(10);
+    }
+
     public static function findSimiliar($name, $exclude_id = null, $limit = 5, $parent_id = null)
     {
          $query = self::selectRaw('id, name, slug, image, MATCH (name) AGAINST (\''.str_singular(str_replace("'", '', $name)).'*\' IN BOOLEAN MODE) as score')
