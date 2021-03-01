@@ -38,7 +38,7 @@ class Brand extends Model
     public function products()
     {
         return $this->hasMany(Product::class)
-                    ->whereNotNull('sales_rank')
+                    // ->whereNotNull('sales_rank')
                     ->whereHas('category', function ($query) {
                         $query->whereNotNull('parent_id');
                     })

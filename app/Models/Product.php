@@ -32,8 +32,8 @@ class Product extends Model
 
     public function getShortNameAttribute()
     {
-        $initial = str_before($this->attributes['name'], ' -');
-        $initial = str_before($initial, ' –');
-        return Str::words(str_before($initial, ','), 10, '');
+        $initial = Str::before($this->attributes['name'], ' -');
+        $initial = Str::before($initial, ' –');
+        return Str::words(Str::before($initial, ','), 10, '');
     }
 }

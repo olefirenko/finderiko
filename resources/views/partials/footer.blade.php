@@ -4,7 +4,7 @@
             <div class="col-md-4 col-12">
                 <div class="footer-widget first-of-footer-widget">
                     <a href="/"><img src="/images/logo.jpg" class="logo-sm mb-10" alt="Finderiko"></a>
-                    <p>Copyright &copy; 2018 Finderiko. All Rights Reserved.</p>
+                    <p>Copyright &copy; 2018 &mdash; 2021 Finderiko. All Rights Reserved.</p>
                     <p>Made with ❤️ by <a style="color: #c53d0a" href="https://webdjstudio.com/" target="_blank">WEB DJ STUDIO</a></p>
                     <p>Our <a href="https://twitter.com/finderiko" target="_blank" rel="nofollow">Twitter</a> and <a href="https://www.facebook.com/finderiko" target="_blank" rel="nofollow">Facebook</a></p>
                     <p>

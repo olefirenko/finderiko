@@ -20,7 +20,7 @@
                 <img src="{{ $subcategory->image }}" alt="{{ $subcategory->name }}" style="max-width:200px;max-height: 250px" loading="lazy" />
             </a>
             <div class="card-body">
-                <h5 class="card-title"><a href="{{ route('category', $subcategory->slug) }}">{{ str_plural($subcategory->name) }}</a></h5>
+                <h5 class="card-title"><a href="{{ route('category', $subcategory->slug) }}">{{ Illuminate\Support\Str::plural($subcategory->name) }}</a></h5>
             </div>
         </div>
         @endforeach

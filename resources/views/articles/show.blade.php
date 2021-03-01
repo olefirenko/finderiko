@@ -7,7 +7,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/">Finderiko</a></li>
-                    <li class="breadcrumb-item active">{{ str_limit($article->name, 50) }}</li>
+                    <li class="breadcrumb-item active">{{ Illuminate\Support\Str::limit($article->name, 50) }}</li>
                 </ol>
             </nav>
     

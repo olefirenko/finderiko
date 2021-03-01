@@ -152,7 +152,7 @@ return [
          */
         Laravel\Tinker\TinkerServiceProvider::class,
         Nathanmac\Utilities\Parser\ParserServiceProvider::class,
-        Baum\Providers\BaumServiceProvider::class,
+        // Baum\Providers\BaumServiceProvider::class,
 
         /*
          * Application Service Providers...

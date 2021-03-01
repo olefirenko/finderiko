@@ -12,14 +12,14 @@
             </ol>
         </nav>
 
-        <h1 class="mt-5 mb-3">10 {{ str_plural($category->title) }} {{ date('Y') }}</h1>
+        <h1 class="mt-5 mb-3">10 {{ Illuminate\Support\Str::plural($category->title) }} {{ date('Y') }}</h1>
         <p class="small author">
             <img loading="lazy" src="/images/gareth.jpg" alt="Gareth Otwell" width="35" class="rounded-circle mr-2">
             Reviewed by Gareth Otwell
             | Last Updated: <time class="entry-modified-time" itemprop="dateModified" datetime="{{ $category->updated_at->toIso8601String() }}">{{ $category->updated_at->toFormattedDateString() }}</time>
         </p>
         {{--  <a href="/delete/{{ $category->id }}">Delete</a>  --}}
-        <div class="alert alert-warning">
+        <!-- <div class="alert alert-warning">
             <p>After analyzing {{ $category->total_results or '' }} products, scanning @if ($category->total_results){{ $category->total_results * 5 }}@endif reviews, spending more than 36 hours of research and speaking with our test users, we think the <a href="{{ $products->first()->amazon_link }}" class="toplink" target="_blank" rel="nofollow">{{ $products->first()->short_name }}</a> is the one of the <strong>Best {{ $category->name }} on the market</strong>.</p>
         </div>
         <div class="table-responsive">
@@ -81,7 +81,7 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>
+        </div> -->
 
         <div class="row">
             <div class="col-md-9">
@@ -90,11 +90,11 @@
                 <h2>
                     <a name="product{{ $key }}" href="{{ $product->amazon_link }}" class="h2{{ $key + 1 }}" target="_blank" rel="nofollow">{{ $product->short_name }}</a>
                     @if ($key == 0)
-                    &ndash; Best Overall {{ title_case(str_singular($category->name)) }}
+                    &ndash; Best Overall {{ Illuminate\Support\Str::title(Illuminate\Support\Str::singular($category->name)) }}
                     @endif
                     
                     @if ($best_for_money && $best_for_money->id == $product->id)
-                    &ndash; Best Budget {{ title_case(str_singular($category->name)) }}
+                    &ndash; Best Budget {{ Illuminate\Support\Str::title(Illuminate\Support\Str::singular($category->name)) }}
                     @endif
 
                     @if ($premium && $premium->id == $product->id)
@@ -119,14 +119,14 @@
             </div>
             <div class="col-md-3 position-relative" id="sidebar">
                 <div class="products_navigation">
-                    <h4>Navigate out top 10 {{ str_plural($category->title) }}</h4>
+                    <h4>Navigate out top 10 {{ Illuminate\Support\Str::plural($category->title) }}</h4>
                     <ul>
                         <li><a href="#tentable">Our Top 10 {{ $category->title }}</a></li>
-                        <li><a href="#product0">⭐Best Overall {{ title_case(str_singular($category->name)) }}</a></li>
+                        <li><a href="#product0">⭐Best Overall {{ Illuminate\Support\Str::title(Illuminate\Support\Str::singular($category->name)) }}</a></li>
                         @foreach ($under_products as $key => $item)
                         <li><a href="#product{{ $products->firstWhere('id', $key)->position - 1 }}">Best Under ${{ $item }}</a></li>                        
                         @endforeach
-                        <li><a href="#product{{ $best_for_money->position - 1  }}">💲Best Budget {{ title_case(str_singular($category->name)) }}</a></li>
+                        <li><a href="#product{{ $best_for_money->position - 1  }}">💲Best Budget {{ Illuminate\Support\Str::title(Illuminate\Support\Str::singular($category->name)) }}</a></li>
                         <li><a href="#product{{ $premium->position - 1 }}">👑Premium Pick</a></li>
                         <li><a href="#similiar">Similiar Products</a></li>
                     </ul>
@@ -151,7 +151,7 @@
                     <img src="{{ $subcategory->image }}" alt="{{ $subcategory->name }}" style="max-height: 250px;max-width:200px" loading="lazy" />
                 </a>
                 <div class="card-body">
-                    <h5 class="card-title"><a href="{{ route('category', $subcategory->slug) }}">{{ str_plural($subcategory->name) }}</a></h5>
+                    <h5 class="card-title"><a href="{{ route('category', $subcategory->slug) }}">{{ Illuminate\Support\Str::plural($subcategory->name) }}</a></h5>
                 </div>
             </div>
             @endforeach

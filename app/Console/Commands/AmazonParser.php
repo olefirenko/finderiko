@@ -5,16 +5,14 @@ namespace App\Console\Commands;
 use Log;
 use Parser;
 use Exception;
-use ApaiIO\ApaiIO;
 use App\Models\Keyword;
 use App\Models\Product;
 use App\Models\Category;
-use ApaiIO\Operations\Search;
 use Illuminate\Console\Command;
-use ApaiIO\Operations\BrowseNodeLookup;
-use ApaiIO\Configuration\GenericConfiguration;
 use Revolution\Amazon\ProductAdvertising\Facades\AmazonProduct;
 use App\Models\Brand;
+use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 
 class AmazonParser extends Command
 {
@@ -40,18 +38,6 @@ class AmazonParser extends Command
     public function __construct()
     {
         parent::__construct();
-
-        $conf = new GenericConfiguration();
-        $client = new \GuzzleHttp\Client();
-        $request = new \ApaiIO\Request\GuzzleRequest($client);
-
-        $conf
-            ->setCountry('com')
-            ->setAccessKey(env('AWS_API_KEY'))
-            ->setSecretKey(env('AWS_API_SECRET_KEY'))
-            ->setAssociateTag(env('AWS_ASSOCIATE_TAG'))
-            ->setRequest($request);
-        $this->apaiIO = new ApaiIO($conf);
     }
 
     /**
@@ -61,6 +47,7 @@ class AmazonParser extends Command
      */
     public function handle()
     {
+        
         // $node_id = $this->ask('What is the node id you are going to fetch?');
 
         // $this->parseNode($node_id);
@@ -88,22 +75,17 @@ class AmazonParser extends Command
     protected function searchCategory(Category $category, $department = 'All')
     {
         $keyword = $category->name;
-        
-        $search = new Search();
-        $search->setCategory($department);
-        $search->setKeywords($keyword);
-        $search->setResponseGroup(['BrowseNodes', 'Images', 'ItemAttributes', 'Offers', 'SalesRank']);
 
-        $results = AmazonProduct::run($search);
-        
-        if (array_get($results, 'Items.Request.IsValid')) {
+        $results = AmazonProduct::search($department, $keyword , 1);
+
+        if ($results && isset($results["SearchResult"]) && count($results["SearchResult"]["Items"]) > 0) {
             // if no results
-            if (!array_get($results, 'Items.Item')) {
-                Log::debug('No items for :'.$keyword);
-                return false;
-            }
+            // if (!Arr::get($results, 'Items.Item')) {
+            //     Log::debug('No items for :'.$keyword);
+            //     return false;
+            // }
 
-            foreach (array_get($results, 'Items.Item') as $key => $product_data) {
+            foreach ($results["SearchResult"]["Items"] as $key => $product_data) {
                 //dd($category->id);
                 $this->parseAmazonProductArray($product_data, $category->id, $key + 1);
             }
@@ -118,7 +100,7 @@ class AmazonParser extends Command
 
         $category = Category::where('name', ucwords($keyword))
                             ->orWhere('name', 'like', '%'.$keyword.'%')
-                            ->orWhere('name', str_plural(ucwords($keyword)))
+                            ->orWhere('name', Str::plural(ucwords($keyword)))
                             ->first();
 
         if ($category) {
@@ -133,22 +115,22 @@ class AmazonParser extends Command
 
         $results = AmazonProduct::run($search);
         
-        if (array_get($results, 'Items.Request.IsValid')) {
+        if (Arr::get($results, 'Items.Request.IsValid')) {
             $category_id = 0;
 
             // if no results
-            if (!array_get($results, 'Items.Item')) {
+            if (!Arr::get($results, 'Items.Item')) {
                 Log::debug('No items for :'.$keyword);
                 return false;
             }
 
-            foreach (array_get($results, 'Items.Item') as $key => $product_data) {
+            foreach (Arr::get($results, 'Items.Item') as $key => $product_data) {
                 // add image and parent_id
                 if ($key == 0) {
-                    if (array_get($product_data, 'BrowseNodes.BrowseNode.0')) {
-                        $node = array_get($product_data, 'BrowseNodes.BrowseNode.0');
+                    if (Arr::get($product_data, 'BrowseNodes.BrowseNode.0')) {
+                        $node = Arr::get($product_data, 'BrowseNodes.BrowseNode.0');
                     } else {
-                        $node = array_get($product_data, 'BrowseNodes.BrowseNode');
+                        $node = Arr::get($product_data, 'BrowseNodes.BrowseNode');
                     }
 
                     if (is_null($node)) {
@@ -172,9 +154,9 @@ class AmazonParser extends Command
                         $category = new Category;
                         $category->name = ucwords($keyword); // add Best if needed and make all first letters capital
                         $category->title = 'Best '.ucwords($keyword);
-                        $category->image = array_get($product_data, 'LargeImage.URL');
+                        $category->image = Arr::get($product_data, 'LargeImage.URL');
                         $category->parent_id = $parent_category->id;
-                        $category->total_results = array_get($results, 'Items.TotalResults');
+                        $category->total_results = Arr::get($results, 'Items.TotalResults');
                         $category->ahrefs_difficulty = $keyword_object->difficulty;
                         $category->ahrefs_volume = $keyword_object->volume;
                         $category->save();
@@ -203,13 +185,13 @@ class AmazonParser extends Command
     {
 
         $response = AmazonProduct::browse($node_id);
-        $nodes = array_get($response, 'BrowseNodes');
-        $items = array_get($nodes, 'BrowseNode.TopSellers.TopSeller');
+        $nodes = Arr::get($response, 'BrowseNodes');
+        $items = Arr::get($nodes, 'BrowseNode.TopSellers.TopSeller');
         $asins = array_pluck($items, 'ASIN');
         $results = AmazonProduct::items($asins);
 
-        if (array_get($results, 'Items.Request.IsValid')) {
-            foreach (array_get($results, 'Items.Item') as $key => $product_data) {
+        if (Arr::get($results, 'Items.Request.IsValid')) {
+            foreach (Arr::get($results, 'Items.Item') as $key => $product_data) {
                 $this->parseAmazonProductArray($product_data, $category_id, $key + 1);
             }
         }
@@ -218,16 +200,16 @@ class AmazonParser extends Command
     protected function parseAmazonProductArray(array $product_data = [], int $category_id, $position = null)
     {
         $product = new Product;
-        $product->ASIN = array_get($product_data, 'ASIN');
-        $product->amazon_link = array_get($product_data, 'DetailPageURL');
-        $product->sales_rank = array_get($product_data, 'SalesRank');
-        $product->image = array_get($product_data, 'LargeImage.URL');
-        $product->brand_name = array_get($product_data, 'ItemAttributes.Brand');
-        $product->name = array_get($product_data, 'ItemAttributes.Title');
-        $product->minimum_age_month = array_get($product_data, 'ItemAttributes.ManufacturerMinimumAge');
-        $product->weight = array_get($product_data, 'ItemAttributes.ItemDimensions.Weight');
-        $product->dimensions = array_get($product_data, 'ItemAttributes.PackageDimensions.Length').' x '.array_get($product_data, 'ItemAttributes.PackageDimensions.Width').' x '.array_get($product_data, 'ItemAttributes.PackageDimensions.Height');
-        $product->price = array_get($product_data, 'OfferSummary.LowestNewPrice.Amount');
+        $product->ASIN = Arr::get($product_data, 'ASIN');
+        $product->amazon_link = Arr::get($product_data, 'DetailPageURL');
+        // $product->sales_rank = Arr::get($product_data, 'SalesRank');
+        $product->image = Arr::get($product_data, 'Images.Primary.Large.URL');
+        $product->brand_name = Arr::get($product_data, 'ItemInfo.ByLineInfo.Brand.DisplayValue');
+        $product->name = Arr::get($product_data, 'ItemInfo.Title.DisplayValue');
+        // $product->minimum_age_month = Arr::get($product_data, 'ItemAttributes.ManufacturerMinimumAge');
+        // $product->weight = Arr::get($product_data, 'ItemAttributes.ItemDimensions.Weight');
+        // $product->dimensions = Arr::get($product_data, 'ItemAttributes.PackageDimensions.Length').' x '.Arr::get($product_data, 'ItemAttributes.PackageDimensions.Width').' x '.Arr::get($product_data, 'ItemAttributes.PackageDimensions.Height');
+        $product->price = Arr::get($product_data, 'Offers.Summaries.0.LowestPrice.Amount');
         $product->position = $position;
 
         if ($product->brand_name) {
@@ -238,7 +220,7 @@ class AmazonParser extends Command
             $product->brand_id = $brand->id;
         }
         
-        $features = array_get($product_data, 'ItemAttributes.Feature');
+        $features = Arr::get($product_data, 'ItemInfo.Features.DisplayValues');
         $features_text = '';
         if (is_array($features)) {
             $features_text = '<ul>';
