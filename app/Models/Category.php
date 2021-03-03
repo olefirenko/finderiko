@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Support\Str;
 
 class Category extends Model
 {
@@ -64,14 +65,14 @@ class Category extends Model
 
     public static function findSimiliar($name, $exclude_id = null, $limit = 5, $parent_id = null)
     {
-         $query = self::selectRaw('id, name, slug, image, MATCH (name) AGAINST (\''.str_singular(str_replace("'", '', $name)).'*\' IN BOOLEAN MODE) as score')
+         $query = self::selectRaw('id, name, slug, image, MATCH (name) AGAINST (\''.Str::singular(str_replace("'", '', $name)).'*\' IN BOOLEAN MODE) as score')
                     ->where('id', '!=', $exclude_id);
 
         if ($parent_id) {
             $query->where('parent_id', '=', $parent_id);
         }
         
-        return $query->whereRaw('MATCH (name) AGAINST (\''.str_singular(str_replace("'", '', $name)).'*\' IN BOOLEAN MODE)')
+        return $query->whereRaw('MATCH (name) AGAINST (\''.Str::singular(str_replace("'", '', $name)).'*\' IN BOOLEAN MODE)')
             ->orderByDesc('score')
             ->limit($limit)
             ->get();

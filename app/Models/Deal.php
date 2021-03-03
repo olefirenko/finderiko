@@ -21,10 +21,10 @@ class Deal extends Model
     {
         $range = intval(max(floor($this->price) / $step, 1));
 
-        $range_price = str_repeat('$', $range);
+        $range_price = Str::repeat('$', $range);
 
         if ($range < 5) {
-            $range_price .= '<span class="text-grey-100">'.str_repeat('$', 5 - $range).'</span>';
+            $range_price .= '<span class="text-grey-100">'.Str::repeat('$', 5 - $range).'</span>';
         }
 
         return $range_price;
@@ -32,8 +32,8 @@ class Deal extends Model
 
     public function getShortNameAttribute()
     {
-        $initial = str_before($this->attributes['name'], ' -');
-        $initial = str_before($initial, ' –');
-        return Str::words(str_before($initial, ','), 10, '');
+        $initial = Str::before($this->attributes['name'], ' -');
+        $initial = Str::before($initial, ' –');
+        return Str::words(Str::before($initial, ','), 10, '');
     }
 }

@@ -6,6 +6,7 @@ use SEO;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
+use Illuminate\Support\Str;
 
 class IndexController extends Controller
 {
@@ -75,13 +76,13 @@ class IndexController extends Controller
                 $related_categories = Category::where('parent_id', $category->parent_id)->inRandomOrder()->limit(5)->get();
             }
 
-            SEO::setTitle('Top 10 '.str_plural($category->name).' ('.date('F Y').')');
-            SEO::setDescription('Finderiko analyzes and compares all '.str_plural($category->name).' of '.date('Y').'. You can easily compare and choose from the 10 best '.str_plural($category->name).' for you.');
+            SEO::setTitle('Top 10 '.Str::plural($category->name).' ('.date('F Y').')');
+            SEO::setDescription('Finderiko analyzes and compares all '.Str::plural($category->name).' of '.date('Y').'. You can easily compare and choose from the 10 best '.Str::plural($category->name).' for you.');
 
             return view('pages.category', compact('category', 'products', 'step', 'related_categories', 'best_for_money', 'under_products', 'premium'));
         } else {
-            SEO::setTitle(str_plural($category->name));
-            SEO::setDescription('Finderiko analyzes and compares all '.str_plural($category->name).' of '.date('Y').'. You can easily compare and choose from the best '.str_plural($category->name));
+            SEO::setTitle(Str::plural($category->name));
+            SEO::setDescription('Finderiko analyzes and compares all '.Str::plural($category->name).' of '.date('Y').'. You can easily compare and choose from the best '.Str::plural($category->name));
 
             return view('pages.parent_category', compact('category'));
         }
@@ -150,10 +151,10 @@ class IndexController extends Controller
                     foreach ($parts as $part) {
                         if (
                             stripos($name, $part) !== false || 
-                            stripos($name, str_singular($part)) !== false || 
-                            stripos($name, str_plural($part)) !== false
+                            stripos($name, Str::singular($part)) !== false || 
+                            stripos($name, Str::plural($part)) !== false
                         ) {
-                            $name = trim(str_ireplace([$part, str_singular($part), str_plural($part), 'for', 's'], '', $name));
+                            $name = trim(Str::ireplace([$part, Str::singular($part), Str::plural($part), 'for', 's'], '', $name));
                         }
                     }
                     if (empty($name) && count($parts) == count(explode(' ', $item->name))) {

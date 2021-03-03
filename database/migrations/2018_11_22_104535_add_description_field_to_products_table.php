@@ -13,9 +13,9 @@ class AddDescriptionFieldToProductsTable extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->text('description')->after('price')->nullable();
-        });
+        // Schema::table('products', function (Blueprint $table) {
+        //     $table->text('description')->after('price')->nullable();
+        // });
     }
 
     /**

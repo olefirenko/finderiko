@@ -17,6 +17,11 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function product_infos()
+    {
+        return $this->hasMany(ProductInfo::class);
+    }
+
     public function getPriceRange($step)
     {
         $range = intval(max(floor($this->price) / $step, 1));
@@ -32,8 +37,8 @@ class Product extends Model
 
     public function getShortNameAttribute()
     {
-        $initial = str_before($this->attributes['name'], ' -');
-        $initial = str_before($initial, ' –');
-        return Str::words(str_before($initial, ','), 10, '');
+        $initial = Str::before($this->attributes['name'], ' -');
+        $initial = Str::before($initial, ' –');
+        return Str::words(Str::before($initial, ','), 10, '');
     }
 }
