@@ -7,14 +7,11 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Support\Str;
-use Revolution\Amazon\ProductAdvertising\Facades\AmazonProduct;
 
 class IndexController extends Controller
 {
     public function index()
     {
-        $results = AmazonProduct::search("All", "Toys & Games" , 1);
-        dd($results);
         $categories = Category::whereNull('parent_id')->where('is_popular', 1)->get();
 
         $brands = Brand::whereNotNull('sales_rank_total')
