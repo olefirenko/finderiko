@@ -17,6 +17,11 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function product_infos()
+    {
+        return $this->hasMany(ProductInfo::class);
+    }
+
     public function getPriceRange($step)
     {
         $range = intval(max(floor($this->price) / $step, 1));

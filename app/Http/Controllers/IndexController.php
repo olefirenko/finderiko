@@ -13,7 +13,7 @@ class IndexController extends Controller
 {
     public function index()
     {
-        $results = AmazonProduct::search("All", "Android phone" , 1);
+        $results = AmazonProduct::search("All", "Toys & Games" , 1);
         dd($results);
         $categories = Category::whereNull('parent_id')->where('is_popular', 1)->get();
 
