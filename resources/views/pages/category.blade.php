@@ -18,7 +18,7 @@
             Reviewed by Gareth Otwell
             | Last Updated: <time class="entry-modified-time" itemprop="dateModified" datetime="{{ $category->updated_at->toIso8601String() }}">{{ $category->updated_at->toFormattedDateString() }}</time>
         </p>
-        {{--  <a href="/delete/{{ $category->id }}">Delete</a>  --}}
+        {{--  <a href="/delete/{{ $category->id }}">Delete</a>  
         <!-- <div class="alert alert-warning">
             <p>After analyzing {{ $category->total_results or '' }} products, scanning @if ($category->total_results){{ $category->total_results * 5 }}@endif reviews, spending more than 36 hours of research and speaking with our test users, we think the <a href="{{ $products->first()->link }}" class="toplink" target="_blank" rel="nofollow">{{ $products->first()->short_name }}</a> is the one of the <strong>Best {{ $category->name }} on the market</strong>.</p>
         </div>
@@ -81,7 +81,7 @@
                     @endforeach
                 </tbody>
             </table>
-        </div> -->
+        </div> -->--}}
 
         <div class="row">
             <div class="col-md-9">
@@ -104,11 +104,11 @@
                     @if (in_array($product->id, array_keys($under_products)))
                     &ndash; Best under ${{ $under_products[$product->id] }}
                     @endif
-                </h2>
+                </h2>{{--
                 <!-- @if ($product->brand->count_products >= 10)
                 <p>By <strong><a href="{{ route('brand', $product->brand->slug) }}">{{ $product->brand->name }}</a></strong></p>
                 @endif -->
-                <!-- <p>Price range 💵 : <strong>{!! $product->getPriceRange($step) !!}</strong></p> -->
+                <!-- <p>Price range 💵 : <strong>{!! $product->getPriceRange($step) !!}</strong></p> -->--}}
                 <a href="{{ $product->link }}" class="pr_link m-5 text_image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" class="rounded" style="max-width: 250px" alt="{{ $product->short_name }}" loading="lazy"/></a>
                {!! str_replace("<ul>", "<ul class='list-circle'>", $product->description) !!}
                 </div>
