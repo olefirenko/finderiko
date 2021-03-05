@@ -105,7 +105,7 @@
                     &ndash; Best under ${{ $under_products[$product->id] }}
                     @endif
                 </h2>
-                @if ($product->brand->count_products >= 1)
+                @if ($product->brand->count_products >= 10)
                 <p>By <strong><a href="{{ route('brand', $product->brand->slug) }}">{{ $product->brand->name }}</a></strong></p>
                 @endif
                 <!-- <p>Price range 💵 : <strong>{!! $product->getPriceRange($step) !!}</strong></p> -->
