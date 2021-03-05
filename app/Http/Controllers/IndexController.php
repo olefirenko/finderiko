@@ -6,6 +6,7 @@ use SEO;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class IndexController extends Controller
@@ -171,5 +172,12 @@ class IndexController extends Controller
             }
             
         }
+    }
+
+    public function redirect(Request $request)
+    {
+        $product = Product::findOrFail($request->rf_item);
+
+        return redirect($product->amazon_link);
     }
 }

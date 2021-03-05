@@ -152,20 +152,15 @@ LISTS
 .list-circle {
   list-style-type: none;
   padding: 0;
+  padding-left: 50px;
 }
 
 .list-circle li {
   position: relative;
   font-size: 16px;
   font-weight: 500;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
   padding-left: 8px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .list-circle li:last-child {
@@ -180,9 +175,10 @@ LISTS
   background: rgba(47, 91, 231, 0.8);
   -webkit-box-shadow: 0 0 0 7px rgba(47, 91, 231, 0.1);
           box-shadow: 0 0 0 7px rgba(47, 91, 231, 0.1);
-  display: inline-block;
   margin-right: 20px;
-  vertical-align: middle;
+  position: absolute;
+  top: 9px;
+  left: -30px;
 }
 
 /*

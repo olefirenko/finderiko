@@ -41,4 +41,9 @@ class Product extends Model
         $initial = Str::before($initial, ' –');
         return Str::words(Str::before($initial, ','), 10, '');
     }
+
+    public function getLinkAttribute()
+    {
+        return "/redirect?rf_item=".$this->id."?rf_list_id=".$this->category_id."&amp;rf_source=amazon&amp;url=".sha1($this->name);
+    }
 }

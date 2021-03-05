@@ -20,7 +20,7 @@
         </p>
         {{--  <a href="/delete/{{ $category->id }}">Delete</a>  --}}
         <!-- <div class="alert alert-warning">
-            <p>After analyzing {{ $category->total_results or '' }} products, scanning @if ($category->total_results){{ $category->total_results * 5 }}@endif reviews, spending more than 36 hours of research and speaking with our test users, we think the <a href="{{ $products->first()->amazon_link }}" class="toplink" target="_blank" rel="nofollow">{{ $products->first()->short_name }}</a> is the one of the <strong>Best {{ $category->name }} on the market</strong>.</p>
+            <p>After analyzing {{ $category->total_results or '' }} products, scanning @if ($category->total_results){{ $category->total_results * 5 }}@endif reviews, spending more than 36 hours of research and speaking with our test users, we think the <a href="{{ $products->first()->link }}" class="toplink" target="_blank" rel="nofollow">{{ $products->first()->short_name }}</a> is the one of the <strong>Best {{ $category->name }} on the market</strong>.</p>
         </div>
         <div class="table-responsive">
             <a name="tentable"></a>
@@ -55,12 +55,12 @@
                             @if (in_array($product->id, array_keys($under_products)))
                             <div class="t-plash">Best under ${{ $under_products[$product->id] }}</div>
                             @endif
-                            <a href="{{ $product->amazon_link }}" class="image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" style="max-height: 250px;max-width: 200px" alt="{{ $product->short_name }}" loading="lazy" /></a>
+                            <a href="{{ $product->link }}" class="image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" style="max-height: 250px;max-width: 200px" alt="{{ $product->short_name }}" loading="lazy" /></a>
                         </td>
                         <td>
                             {!! str_replace($product->short_name, '<a href="#product'.$key.'">'.$product->short_name.'</a><span class="mh">', $product->name) !!}
                             </span>
-                            <a href="{{ $product->amazon_link }}" class="btn btn-primary button{{ $key + 1 }} d-block d-sm-none mt-3" target="_blank" rel="nofollow">Check price</a>
+                            <a href="{{ $product->link }}" class="btn btn-primary button{{ $key + 1 }} d-block d-sm-none mt-3" target="_blank" rel="nofollow">Check price</a>
                         </td>
                         <td class="text-info font-weight-bold mh">
                             @if ($product->brand)
@@ -76,7 +76,7 @@
                         <td class="font-weight-bold fs-20 mh">
                             {!! $product->getPriceRange($step) !!}
                         </td>
-                        <td class="mh"><a href="{{ $product->amazon_link }}" class="btn btn-primary button{{ $key + 1 }}" target="_blank" rel="nofollow">Check price</a></td>
+                        <td class="mh"><a href="{{ $product->link }}" class="btn btn-primary button{{ $key + 1 }}" target="_blank" rel="nofollow">Check price</a></td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -88,25 +88,27 @@
                 @foreach ($products as $key => $product)
                 <div class="m-1 clearfix">
                 <h2>
-                    <a name="product{{ $key }}" href="{{ $product->amazon_link }}" class="h2{{ $key + 1 }}" target="_blank" rel="nofollow">{{ $product->short_name }}</a>
+                    <a name="product{{ $key }}" href="{{ $product->link }}" class="h2{{ $key + 1 }}" target="_blank" rel="nofollow">{{ $product->short_name }}</a>
                     @if ($key == 0)
-                    &ndash; Best Overall {{ Illuminate\Support\Str::title(Illuminate\Support\Str::singular($category->name)) }}
+                    &ndash; ⭐ Best Overall {{ Illuminate\Support\Str::title(Illuminate\Support\Str::singular($category->name)) }}
                     @endif
                     
                     @if ($best_for_money && $best_for_money->id == $product->id)
-                    &ndash; Best Budget {{ Illuminate\Support\Str::title(Illuminate\Support\Str::singular($category->name)) }}
+                    &ndash; 💲 Best Budget {{ Illuminate\Support\Str::title(Illuminate\Support\Str::singular($category->name)) }}
                     @endif
 
                     @if ($premium && $premium->id == $product->id)
-                    &ndash; Premium Pick
+                    &ndash; 👑 Premium Pick
                     @endif
 
                     @if (in_array($product->id, array_keys($under_products)))
                     &ndash; Best under ${{ $under_products[$product->id] }}
                     @endif
                 </h2>
-                <a href="{{ $product->amazon_link }}" class="pr_link m-5 text_image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" class="rounded" style="max-width: 250px" alt="{{ $product->short_name }}" loading="lazy"/></a>
-                {!! $product->description !!}
+                <p>By <strong><a href="{{ route('brand', $product->brand->slug) }}">{{ $product->brand->name }}</a></strong></p>
+                <!-- <p>Price range 💵 : <strong>{!! $product->getPriceRange($step) !!}</strong></p> -->
+                <a href="{{ $product->link }}" class="pr_link m-5 text_image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" class="rounded" style="max-width: 250px" alt="{{ $product->short_name }}" loading="lazy"/></a>
+               {!! str_replace("<ul>", "<ul class='list-circle'>", $product->description) !!}
                 </div>
                 @endforeach
 
@@ -121,7 +123,6 @@
                 <div class="products_navigation">
                     <h4>Navigate out top 10 {{ Illuminate\Support\Str::plural($category->title) }}</h4>
                     <ul>
-                        <li><a href="#tentable">Our Top 10 {{ $category->title }}</a></li>
                         <li><a href="#product0">⭐Best Overall {{ Illuminate\Support\Str::title(Illuminate\Support\Str::singular($category->name)) }}</a></li>
                         @foreach ($under_products as $key => $item)
                         <li><a href="#product{{ $products->firstWhere('id', $key)->position - 1 }}">Best Under ${{ $item }}</a></li>                        
