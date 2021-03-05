@@ -105,7 +105,9 @@
                     &ndash; Best under ${{ $under_products[$product->id] }}
                     @endif
                 </h2>
+                @if ($product->brand->count_products >= 1)
                 <p>By <strong><a href="{{ route('brand', $product->brand->slug) }}">{{ $product->brand->name }}</a></strong></p>
+                @endif
                 <!-- <p>Price range 💵 : <strong>{!! $product->getPriceRange($step) !!}</strong></p> -->
                 <a href="{{ $product->link }}" class="pr_link m-5 text_image{{ $key + 1 }}" target="_blank" rel="nofollow"><img src="{{ $product->image }}" class="rounded" style="max-width: 250px" alt="{{ $product->short_name }}" loading="lazy"/></a>
                {!! str_replace("<ul>", "<ul class='list-circle'>", $product->description) !!}
