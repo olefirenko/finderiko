@@ -14,6 +14,8 @@ use App\Models\Brand;
 use App\Models\ProductInfo;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use GuzzleHttp\Exception\RequestException;
+
 
 class AmazonParser extends Command
 {
@@ -66,7 +68,11 @@ class AmazonParser extends Command
         } else {
             $keywords = Keyword::all();
             foreach ($keywords as $keyword) {
-                $this->searchAmazon($keyword);
+                try {
+                    $this->searchAmazon($keyword);
+                } catch (Exception $exception) {
+                    dd($exception->getMessage());
+                }
                 $keyword->delete($keyword);
                 sleep(3);
             }
@@ -109,74 +115,67 @@ class AmazonParser extends Command
             return false;
         }
 
-        $search = new Search();
-        $search->setCategory($department);
-        $search->setKeywords($keyword);
-        $search->setResponseGroup(['BrowseNodes', 'Images', 'ItemAttributes', 'Offers', 'SalesRank']);
+        $results = AmazonProduct::search($department, $keyword, 1);
 
-        $results = AmazonProduct::run($search);
+        if (!$results || !isset($results["SearchResult"]) || count($results["SearchResult"]["Items"]) === 0) {
+            Log::debug('No items for :' . $keyword);
+            return;
+        }
 
-        if (Arr::get($results, 'Items.Request.IsValid')) {
-            $category_id = 0;
+        $category_id = 0;
 
-            // if no results
-            if (!Arr::get($results, 'Items.Item')) {
-                Log::debug('No items for :' . $keyword);
-                return false;
-            }
-
-            foreach (Arr::get($results, 'Items.Item') as $key => $product_data) {
-                // add image and parent_id
-                if ($key == 0) {
-                    if (Arr::get($product_data, 'BrowseNodes.BrowseNode.0')) {
-                        $node = Arr::get($product_data, 'BrowseNodes.BrowseNode.0');
-                    } else {
-                        $node = Arr::get($product_data, 'BrowseNodes.BrowseNode');
-                    }
-
-                    if (is_null($node)) {
-                        Log::debug('No parent name for :' . $keyword);
-                        return false;
-                    }
-
-                    $parent = $this->findParentCategory($node);
-
-                    if (!isset($parent['Name']) || is_null($node)) {
-                        Log::debug('No parent name for :' . $keyword);
-                        return false;
-                    }
-
-                    $parent_category = Category::firstOrCreate([
-                        'name' => $parent['Name'],
-                    ]);
-
-                    if (!$category) {
-                        // insert new category
-                        $category = new Category;
-                        $category->name = ucwords($keyword); // add Best if needed and make all first letters capital
-                        $category->title = 'Best ' . ucwords($keyword);
-                        $category->image = Arr::get($product_data, 'LargeImage.URL');
-                        $category->parent_id = $parent_category->id;
-                        $category->total_results = Arr::get($results, 'Items.TotalResults');
-                        $category->ahrefs_difficulty = $keyword_object->difficulty;
-                        $category->ahrefs_volume = $keyword_object->volume;
-                        $category->save();
-                    }
-
-                    $category_id = $category->id;
+        foreach ($results["SearchResult"]["Items"] as $key => $product_data) {
+            // add image and parent_id
+            if ($key == 0) {
+                
+                if (Arr::get($product_data, 'BrowseNodeInfo.BrowseNodes.0')) {
+                    $node = Arr::get($product_data, 'BrowseNodeInfo.BrowseNodes.0');
+                } else {
+                    $node = Arr::get($product_data, 'BrowseNodeInfo.BrowseNode');
                 }
 
-                $this->parseAmazonProductArray($product_data, $category_id, $key + 1);
+                if (is_null($node)) {
+                    Log::debug('No parent name for :' . $keyword);
+                    return false;
+                }
+
+                $parent = $this->findParentCategory($node);
+
+                if (!isset($parent['DisplayName']) || is_null($node)) {
+                    Log::debug('No parent name for :' . $keyword);
+                    return false;
+                }
+
+                $parent_category = Category::firstOrCreate([
+                    'name' => $parent['DisplayName'],
+                ]);
+
+                if (!$category) {
+                    // insert new category
+                    $category = new Category;
+                    $category->name = ucwords($keyword); // add Best if needed and make all first letters capital
+                    $category->title = 'Best ' . ucwords($keyword);
+                    $category->image = Arr::get($product_data, 'Images.Primary.Large.URL');
+                    $category->parent_id = $parent_category->id;
+                    //$category->total_results = Arr::get($results, 'Items.TotalResults');
+                    //$category->ahrefs_difficulty = $keyword_object->difficulty;
+                    //$category->ahrefs_volume = $keyword_object->volume;
+                    $category->save();
+                }
+
+                $category_id = $category->id;
             }
+
+            $this->parseAmazonProductArray($product_data, $category_id, $key + 1);
         }
     }
 
     protected function findParentCategory(array $node)
     {
-        $browser_node = $node['Ancestors']['BrowseNode'];
+        $browser_node = $node['Ancestor'];
 
-        while (isset($browser_node['Ancestors'])) {
-            $browser_node = $browser_node['Ancestors']['BrowseNode'];
+        while (isset($browser_node['Ancestor'])) {
+            $browser_node = $browser_node['Ancestor'];
         }
 
         return $browser_node;
@@ -236,21 +235,26 @@ class AmazonParser extends Command
         $product->save();
 
         $product_infos = Arr::get($product_data, 'ItemInfo.ProductInfo');
+
         if (is_array($product_infos)) {
             foreach ($product_infos as $key => $product_info) {
-                if (isset($product_info['Label'])) {
+                if (isset($product_info['Label']) && isset($product_info['DisplayValue'])) {
                     $product->product_infos()->create([
                         'label' => $product_info['Label'], 
-                        'value' => $product_info['DisplayValue'],
-                        'locale' => $product_info['Locale'],
+                        'value' => Arr::get($product_info, 'DisplayValue'),
+                        'locale' => Arr::get($product_info, 'Locale'),
+                        'unit' => Arr::get($product_info, 'Unit'),
                     ]);
                 } else {
                     foreach ($product_info as $key => $nested_product_info) {
-                        $product->product_infos()->create([
-                            'label' => $nested_product_info['Label'], 
-                            'value' => $nested_product_info['DisplayValue'],
-                            'locale' => $nested_product_info['Locale'],
-                        ]);
+                        if (isset($nested_product_info['Label']) && isset($nested_product_info['DisplayValue'])) {
+                            $product->product_infos()->create([
+                                'label' => $nested_product_info['Label'], 
+                                'value' => Arr::get($nested_product_info, 'DisplayValue'),
+                                'locale' => Arr::get($nested_product_info, 'Locale'),
+                                'unit' => Arr::get($nested_product_info, 'Unit'),
+                            ]);
+                        }
                     }
                 }
             }
@@ -259,19 +263,23 @@ class AmazonParser extends Command
         $product_infos = Arr::get($product_data, 'ItemInfo.ManufactureInfo');
         if (is_array($product_infos)) {
             foreach ($product_infos as $key => $product_info) {
-                if (isset($product_info['Label'])) {
+                if (isset($product_info['Label']) && isset($product_info['DisplayValue'])) {
                     $product->product_infos()->create([
                         'label' => $product_info['Label'], 
-                        'value' => $product_info['DisplayValue'],
-                        'locale' => $product_info['Locale'],
+                        'value' => Arr::get($product_info, 'DisplayValue'),
+                        'locale' => Arr::get($product_info, 'Locale'),
+                        'unit' => Arr::get($product_info, 'Unit'),
                     ]);
                 } else {
                     foreach ($product_info as $key => $nested_product_info) {
-                        $product->product_infos()->create([
-                            'label' => $nested_product_info['Label'], 
-                            'value' => $nested_product_info['DisplayValue'],
-                            'locale' => $nested_product_info['Locale'],
-                        ]);
+                        if (isset($nested_product_info['Label']) && isset($nested_product_info['DisplayValue'])) {
+                            $product->product_infos()->create([
+                                'label' => $nested_product_info['Label'], 
+                                'value' => Arr::get($nested_product_info, 'DisplayValue'),
+                                'locale' => Arr::get($nested_product_info, 'Locale'),
+                                'unit' => Arr::get($nested_product_info, 'Unit'),
+                            ]);
+                        }
                     }
                 }
             }

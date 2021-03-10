@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\Product;
 use Illuminate\Console\Command;
 use App\Models\Category;
+use Exception;
 
 class MigrateBrands extends Command
 {
@@ -40,40 +41,43 @@ class MigrateBrands extends Command
      */
     public function handle()
     {
-        // Brand::where('count_products', '>=', 10)->chunk(100, function ($brands) {
-        //     foreach ($brands as $brand) {
-        //         if (!$brand->products->first()) {
-        //             continue;
-        //         }
-
-        //         $brand->category_id = $brand->products->first()->category->parent->id;
-        //         $brand->save();
-        //     }
-        // });
-        // dd();
-        Product::where('brand_id', 0)->chunk(100, function ($products) {
-            foreach ($products as $key => $product) {
-                if (empty($product->brand_name)) {
+        Brand::where('count_products', '>=', 1)->chunk(100, function ($brands) {
+            foreach ($brands as $brand) {
+                if (!$brand->products->first()) {
                     continue;
                 }
 
-                $brand = Brand::firstOrCreate([
-                    'name' => $product->brand_name,
-                ]);
-
-                $product->brand_id = $brand->id;
-                $product->save();
+                try {
+                    $brand->category_id = $brand->products->first()->category->parent->id;
+                    $brand->save();
+                } catch (Exception $e) {
+                }
             }
         });
+        // dd();
+        // Product::where('brand_id', 0)->chunk(100, function ($products) {
+        //     foreach ($products as $key => $product) {
+        //         if (empty($product->brand_name)) {
+        //             continue;
+        //         }
 
-        // Brand::where('count_products', '>=', 10)->chunk(100, function ($brands) {
+        //         $brand = Brand::firstOrCreate([
+        //             'name' => $product->brand_name,
+        //         ]);
+
+        //         $product->brand_id = $brand->id;
+        //         $product->save();
+        //     }
+        // });
+
+        // Brand::chunk(100, function ($brands) {
         //     foreach ($brands as $key => $brand) {
-        //         // $count_products = $brand->products()
-        //         //           ->with('category')
-        //         //           ->groupBy('name')
-        //         //           ->get()
-        //         //           ->count();
-        //         // $brand->count_products = $count_products;
+        //         $count_products = $brand->products()
+        //                   ->with('category')
+        //                   ->groupBy('name')
+        //                   ->get()
+        //                   ->count();
+        //         $brand->count_products = $count_products;
         //         // $brand->save();
                 
         //         $sales_rank_total = $brand->products()
@@ -82,7 +86,9 @@ class MigrateBrands extends Command
         //                   ->get()
         //                   ->sum('sales_rank');
 
-        //         $brand->sales_rank_total = $sales_rank_total / $brand->count_products;
+        //         if ($brand->count_products !== 0) {
+        //             $brand->sales_rank_total = $sales_rank_total / $brand->count_products;
+        //         }
         //         $brand->save();
         //     }
         // });

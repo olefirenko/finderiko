@@ -149,10 +149,35 @@ LAYOUTS
 LISTS
 ====================
 */
+.list-infos {
+  padding-left: 0;
+  list-style: none;
+  margin-bottom: 20px;
+  border-radius: .25rem;
+  background: #f9fafb;
+  padding: 25px 15px 15px 15px;
+}
+
+.list-infos li {
+  margin-bottom: 15px;
+}
+
+.list-infos li .feature {
+  font-weight: 600;
+}
+
+.list-infos li svg {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  vertical-align: bottom;
+}
+
 .list-circle {
   list-style-type: none;
   padding: 0;
   padding-left: 50px;
+  overflow: hidden;
 }
 
 .list-circle li {
@@ -1828,6 +1853,8 @@ PADDING TOPS
   position: relative;
   float: right;
   display: block;
+  z-index: 10;
+  overflow: auto;
 }
 
 a.pr_link::after {
@@ -1839,8 +1866,14 @@ a.pr_link::after {
 
 .pr_link img {
   max-height: 450px;
+  max-width: 250px;
   margin: 0 0 24px 24px;
 }
+
+/* .pr_link img:hover {
+  max-height: 100%;
+  max-width: 100%;
+} */
 
 #faqs .card-img-top:hover {
   transform: scale(1.04);

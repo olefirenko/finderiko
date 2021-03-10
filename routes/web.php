@@ -20,4 +20,4 @@ Route::get('redirect', ['as' => 'redirect', 'uses' => 'IndexController@redirect'
 Route::get('{slug}', 'IndexController@category')->name('category');
 Route::get('p/{slug}', ['as' => 'article', 'uses' => 'ArticleController@show']);
 Route::get('brands/{slug}', ['as' => 'brand', 'uses' => 'IndexController@brand']);
-//Route::get('delete/{id}', 'IndexController@deleteCategory');
+Route::get('delete/{id}', 'IndexController@deleteCategory');

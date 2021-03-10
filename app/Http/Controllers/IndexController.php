@@ -36,7 +36,7 @@ class IndexController extends Controller
         $category = Category::where('slug', $slug)->firstOrFail();
 
         if ($category->parent_id) {
-            $products = Product::with('brand')->where('category_id', $category->id)->get();
+            $products = Product::with(['brand', 'product_infos'])->where('category_id', $category->id)->get();
             $step = $products->max('price') / 5;
 
             $premium = $products->whereNotIn('id', [$products->first()->id])->sortByDesc('price')->firstWhere('price', '>', 0);
@@ -92,8 +92,9 @@ class IndexController extends Controller
     public function brands()
     {
         $brands = Brand::whereNotNull('sales_rank_total')
+                        ->where('count_products', ">", 10)
                         ->has('category')
-                        ->orderBy('sales_rank_total')
+                        ->orderByRaw('sales_rank_total / count_products')
                         ->limit(100)
                         ->get();
 

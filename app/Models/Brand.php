@@ -62,6 +62,6 @@ class Brand extends Model
 
     public function scopeShouldBeShown(Builder $builder)
     {
-        $builder->where('count_products', '>=', 10);
+        
     }
 }
