@@ -87,8 +87,8 @@
                 <div class="col-md-9">
                     @foreach ($products as $key => $product)
                     <div class="m-1 clearfix">
-                        <h2>
-                            <a name="product{{ $key }}" href="{{ $product->link }}" class="h2{{ $key + 1 }}" target="_blank" rel="nofollow">{{ $product->short_name }}</a>
+                        <h2 id="product{{ $key }}">
+                            {{ $product->short_name }}
                             @if ($key == 0)
                             &ndash; ⭐ Best Overall {{ Illuminate\Support\Str::title(Illuminate\Support\Str::singular($category->name)) }}
                             @endif
