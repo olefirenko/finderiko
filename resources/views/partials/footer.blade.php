@@ -36,6 +36,9 @@
                                 <li>
                                     <a href="{{ route('article', 'privacy-policy') }}">Privacy Policy</a>
                                 </li>
+                                <li>
+                                    <a href="https://parceltrackingapp.com/en" target="_blank">ParcelTrackingApp.com</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
